@@ -1,7 +1,5 @@
 "use client";
 import { useState } from "react";
-import { FaRegLightbulb } from "react-icons/fa6";
-import { FaLightbulb } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
