@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-const expense = () => {
+const Expense = () => {
   const dispatch = useDispatch();
   const budget = useSelector((state) => state.budget.items);
   const [newCategory, setNewCategory] = useState("");
@@ -137,4 +137,4 @@ const expense = () => {
   );
 };
 
-export default expense;
+export default Expense;

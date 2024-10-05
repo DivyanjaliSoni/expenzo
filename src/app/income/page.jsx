@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { updateIncome } from "../../store/incomeSlice";
 import { useRouter } from "next/navigation";
 
-const income = () => {
+const Income = () => {
   const router = useRouter();
 
   const dispatch = useDispatch();
@@ -83,4 +83,4 @@ const income = () => {
   );
 };
 
-export default income;
+export default Income;

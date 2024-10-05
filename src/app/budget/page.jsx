@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { addBudget } from "@/store/budgetSlice";
 
-const budget = () => {
+const Budget = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [newCategory, setNewCategory] = useState("");
@@ -152,4 +152,4 @@ const budget = () => {
   );
 };
 
-export default budget;
+export default Budget;
