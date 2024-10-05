@@ -2,29 +2,35 @@
 import { FaPlus } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import Link from "next/link";
 
 export default function Home() {
+  const income = useSelector((state) => state.income);
+  const budget = useSelector((state) => state.budget.items);
+  const expense = useSelector((state) => state.expense.items);
+  console.log("income", income);
   return (
-    <main className="px-5 dark:bg-gray-500 min-h-[89vh] text-gray-800 dark:text-gray-100">
-      <section className="py-10 flex flex-col gap-y-5 justify-center">
+    <section className="px-5 dark:bg-gray-900 min-h-[89vh] text-gray-800 dark:text-gray-100">
+      <div className="py-10 flex flex-col gap-y-5 justify-center">
         <div className="text-center">
-          <a
+          <Link
             href="/income"
             className="bg-gray-800 dark:bg-gray-700 text-white py-2 w-36 block mx-auto"
           >
-            Set Income
-          </a>
+            {income.source ? `Income: ${income.amount}` : "Set Income"}
+          </Link>
         </div>
         <div className="text-center">
-          <a
+          <Link
             href="/budget"
             className="bg-gray-800 dark:bg-gray-700 text-white py-2 w-36 block mx-auto"
           >
-            Set Budget
-          </a>
+            {budget.length !== 0 ? "Show Budget" : "Set Budget"}
+          </Link>
         </div>
         <div className="text-center">
-          <a
+          <Link
             href="/expense"
             className="bg-gray-800 dark:bg-gray-700 text-white py-2 w-36 flex justify-center items-center gap-2 mx-auto"
           >
@@ -32,10 +38,10 @@ export default function Home() {
               <FaPlus />
             </span>
             <span>Add Expense</span>
-          </a>
+          </Link>
         </div>
-      </section>
-      <section>
+      </div>
+      <div>
         <div>
           <div className="border-b border-gray-500 dark:border-gray-200 mb-5">
             <h3 className="text-xl font-bold pb-2">Transaction History</h3>
@@ -53,36 +59,27 @@ export default function Home() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="my-2">
-                    <td>1.</td>
-                    <td>Milk</td>
-                    <td>10</td>
-                    <td>Grocery</td>
-                    <td>
-                      <div className="flex gap-4 text-2xl items-center">
-                        <MdDeleteOutline className="text-red-700 cursor-pointer" />
-                        <FaRegEdit className="text-gray-700 cursor-pointer" />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="my-2">
-                    <td>2.</td>
-                    <td>Vegeis</td>
-                    <td>150</td>
-                    <td>Food</td>
-                    <td>
-                      <div className="flex gap-4 text-2xl items-center">
-                        <MdDeleteOutline className="text-red-700 cursor-pointer" />
-                        <FaRegEdit className="text-gray-700 cursor-pointer" />
-                      </div>
-                    </td>
-                  </tr>
+                  {expense &&
+                    expense.map((exp, index) => (
+                      <tr className="my-2" key={index}>
+                        <td>{index+1}.</td>
+                        <td>{exp.label}</td>
+                        <td>{exp.amount}</td>
+                        <td>{exp.food}</td>
+                        <td>
+                          <div className="flex gap-4 text-2xl items-center">
+                            <MdDeleteOutline className="text-red-700 cursor-pointer" />
+                            <FaRegEdit className="text-gray-500 cursor-pointer" />
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
           </div>
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
   );
 }
