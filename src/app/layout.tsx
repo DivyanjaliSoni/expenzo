@@ -5,18 +5,6 @@ import { useState } from "react";
 import { FaRegLightbulb } from "react-icons/fa6";
 import { FaLightbulb } from "react-icons/fa6";
 
-// const geistSans = localFont({
-//   src: "./fonts/GeistVF.woff",
-//   variable: "--font-geist-sans",
-//   weight: "100 900",
-// });
-// const geistMono = localFont({
-//   src: "./fonts/GeistMonoVF.woff",
-//   variable: "--font-geist-mono",
-//   weight: "100 900",
-// });
-
-
 const nunito = Nunito({
   subsets: ["latin"],
 });
