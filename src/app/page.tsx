@@ -5,7 +5,6 @@ import { MdDeleteOutline } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 
 export default function Home() {
-  const [isDarkMode, setIsDarkMode] = useState(true);
   return (
     <main className="px-5 dark:bg-gray-500 min-h-[89vh] text-gray-800 dark:text-gray-100">
       <section className="py-10 flex flex-col gap-y-5 justify-center">
