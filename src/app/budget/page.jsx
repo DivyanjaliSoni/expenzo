@@ -130,7 +130,7 @@ const Budget = () => {
                 <tbody>
                   {budget &&
                     budget.map((bud, index) => (
-                      <tr className="my-2">
+                      <tr className="my-2" key={index}>
                         <td>{index+1}.</td>
                         <td>{bud.amount}</td>
                         <td>{bud.category}</td>
