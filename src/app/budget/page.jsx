@@ -29,14 +29,14 @@ const Budget = () => {
 
   return (
     <>
-      <section className=" min-h-[88.9vh] dark:bg-gray-900 text-white py-10 px-5 ">
+      <section className=" min-h-[88.9vh] dark:bg-gray-900 py-10 px-5 ">
         <div className="pb-5">
-          <h1 className="text-2xl font-bold pb-5">Add Budget</h1>
+          <h1 className="text-2xl font-bold pb-5  text-gray-800 dark:text-gray-100">Add Budget</h1>
 
           <div className="md:flex md:items-center mb-6">
             <div className="md:w-1/3">
               <label
-                className="block text-gray-200 font-bold md:text-right mb-1 md:mb-0 pr-4"
+                className="block dark:text-gray-200 text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
                 htmlFor="inline-password"
               >
                 Amount<span>*</span>
@@ -56,7 +56,7 @@ const Budget = () => {
           <div className="md:flex md:items-center mb-6">
             <div className="md:w-1/3">
               <label
-                className="block text-gray-200 font-bold md:text-right mb-1 md:mb-0 pr-4"
+                className="block dark:text-gray-200 text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
                 htmlFor="inline-password"
               >
                 Category<span>*</span>
@@ -76,7 +76,7 @@ const Budget = () => {
           <div className="md:flex md:items-center mb-6">
             <div className="md:w-1/3">
               <label
-                className="block text-gray-200 font-bold md:text-right mb-1 md:mb-0 pr-4"
+                className="block dark:text-gray-200 text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
                 htmlFor="inline-full-name"
               >
                 Label
@@ -127,7 +127,7 @@ const Budget = () => {
                     <td>Actions</td>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="dark:text-white text-gray-800">
                   {budget &&
                     budget.map((bud, index) => (
                       <tr className="my-2" key={index}>
@@ -135,7 +135,7 @@ const Budget = () => {
                         <td>{bud.amount}</td>
                         <td>{bud.category}</td>
                         <td>
-                          <div className="flex gap-4 text-2xl items-center">
+                          <div className="flex gap-4 text-2xl items-center justify-center">
                             <MdDeleteOutline className="text-red-700 cursor-pointer" />
                             <FaRegEdit className="text-gray-500 cursor-pointer" />
                           </div>

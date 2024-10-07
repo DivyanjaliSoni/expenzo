@@ -9,7 +9,6 @@ export default function Home() {
   const income = useSelector((state) => state.income);
   const budget = useSelector((state) => state.budget.items);
   const expense = useSelector((state) => state.expense.items);
-  console.log("income", income);
   return (
     <section className="px-5 dark:bg-gray-900 min-h-[89vh] text-gray-800 dark:text-gray-100">
       <div className="py-10 flex flex-col gap-y-5 justify-center">
@@ -65,7 +64,7 @@ export default function Home() {
                         <td>{index+1}.</td>
                         <td>{exp.label}</td>
                         <td>{exp.amount}</td>
-                        <td>{exp.food}</td>
+                        <td>{exp.category}</td>
                         <td>
                           <div className="flex gap-4 text-2xl items-center">
                             <MdDeleteOutline className="text-red-700 cursor-pointer" />
