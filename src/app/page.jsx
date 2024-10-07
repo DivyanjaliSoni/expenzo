@@ -50,10 +50,9 @@ export default function Home() {
               <table className="w-full">
                 <thead className="font-bold dark:bg-gray-400 bg-gray-500 text-white">
                   <tr>
-                    <td>S.no</td>
                     <td>Product</td>
-                    <td>Amount</td>
                     <td>Category</td>
+                    <td>Amount</td>
                     <td>Actions</td>
                   </tr>
                 </thead>
@@ -61,13 +60,12 @@ export default function Home() {
                   {expense &&
                     expense.map((exp, index) => (
                       <tr className="my-2" key={index}>
-                        <td>{index+1}.</td>
                         <td>{exp.label}</td>
-                        <td>{exp.amount}</td>
                         <td>{exp.category}</td>
+                        <td className="text-red-400 font-bold">- &#x20B9;{exp.amount}</td>
                         <td>
-                          <div className="flex gap-4 text-2xl items-center">
-                            <MdDeleteOutline className="text-red-700 cursor-pointer" />
+                          <div className="flex gap-4 text-2xl items-center justify-center">
+                            {/* <MdDeleteOutline className="text-red-700 cursor-pointer" /> */}
                             <FaRegEdit className="text-gray-500 cursor-pointer" />
                           </div>
                         </td>

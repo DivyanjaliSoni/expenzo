@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdDeleteOutline } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
@@ -13,6 +13,11 @@ const Budget = () => {
   const [newAmount, setNewAmount] = useState("");
   const [newDesc, setNewDesc] = useState("");
   const budget = useSelector((state) => state.budget.items);
+  const expense = useSelector((state) => state.expense.items);
+
+  useEffect(()=>{
+    console.log(expense)
+  })
 
   const handleSubmit = () => {
     setNewAmount("");
@@ -121,25 +126,18 @@ const Budget = () => {
               <table className="w-full">
                 <thead className="font-bold dark:bg-gray-400 bg-gray-500 text-white">
                   <tr>
-                    <td>S.no</td>
                     <td>Amount</td>
                     <td>Category</td>
-                    <td>Actions</td>
+                    <td>balance</td>
                   </tr>
                 </thead>
                 <tbody className="dark:text-white text-gray-800">
                   {budget &&
                     budget.map((bud, index) => (
                       <tr className="my-2" key={index}>
-                        <td>{index+1}.</td>
                         <td>{bud.amount}</td>
                         <td>{bud.category}</td>
-                        <td>
-                          <div className="flex gap-4 text-2xl items-center justify-center">
-                            <MdDeleteOutline className="text-red-700 cursor-pointer" />
-                            <FaRegEdit className="text-gray-500 cursor-pointer" />
-                          </div>
-                        </td>
+                        <td className="text-green-400 font-bold">&#x20B9;{bud.amount}</td>
                       </tr>
                     ))}
                 </tbody>
