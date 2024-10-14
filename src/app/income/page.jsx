@@ -19,6 +19,9 @@ const Income = () => {
   return (
     <section className="dark:bg-gray-900 px-2 min-h-[88vh] text-white">
       <div className="px-5 py-10">
+        <h1 className="text-2xl font-bold pb-5  text-gray-800 dark:text-gray-100">
+          Add Income
+        </h1>
         <div className="md:flex md:items-center mb-6">
           <div className="md:w-1/3">
             <label

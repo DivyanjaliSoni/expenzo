@@ -27,6 +27,9 @@ const Expense = () => {
   return (
     <section className="dark:bg-gray-900 px-2 min-h-[88vh] text-white">
       <div className="px-5 py-10">
+        <h1 className="text-2xl font-bold pb-5  text-gray-800 dark:text-gray-100">
+          Add Expenses
+        </h1>
         <div className="md:flex md:items-center mb-6">
           <div className="md:w-1/3">
             <label
@@ -53,7 +56,7 @@ const Expense = () => {
               className="block text-gray-200 font-bold md:text-right mb-1 md:mb-0 pr-4"
               htmlFor="inline-full-name"
             >
-              Label<span>*</span>
+              Product<span>*</span>
             </label>
           </div>
           <div className="md:w-2/3">
@@ -85,9 +88,9 @@ const Expense = () => {
               <option selected>Select Category...</option>
               <option value="other">Other</option>
               {budget.map((bud, index) => (
-              <option key={index} value={bud.category}>
-                {bud.category}
-              </option>
+                <option key={index} value={bud.category}>
+                  {bud.category}
+                </option>
               ))}
             </select>
           </div>

@@ -15,9 +15,14 @@ const Budget = () => {
   const budget = useSelector((state) => state.budget.items);
   const expense = useSelector((state) => state.expense.items);
 
-  useEffect(()=>{
-    console.log(expense)
-  })
+  const calculateBalance = (category) => {
+    const budgetItem = budget.find((bud) => bud.category === category);
+    const totalExpenses = expense
+      .filter((exp) => exp.category === category)
+      .reduce((total, exp) => total + Number(exp.amount), 0);
+
+    return budgetItem ? budgetItem.amount - totalExpenses : 0;
+  };
 
   const handleSubmit = () => {
     setNewAmount("");
@@ -36,7 +41,9 @@ const Budget = () => {
     <>
       <section className=" min-h-[88.9vh] dark:bg-gray-900 py-10 px-5 ">
         <div className="pb-5">
-          <h1 className="text-2xl font-bold pb-5  text-gray-800 dark:text-gray-100">Add Budget</h1>
+          <h1 className="text-2xl font-bold pb-5  text-gray-800 dark:text-gray-100">
+            Add Budget
+          </h1>
 
           <div className="md:flex md:items-center mb-6">
             <div className="md:w-1/3">
@@ -101,7 +108,7 @@ const Budget = () => {
             <div className="md:w-1/3"></div>
             <div className="md:w-2/3 flex justify-between">
               <button
-              onClick={()=>router.push('/')}
+                onClick={() => router.push("/")}
                 className="shadow bg-gray-600 hover:bg-gray-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
                 type="button"
               >
@@ -137,7 +144,9 @@ const Budget = () => {
                       <tr className="my-2" key={index}>
                         <td>{bud.amount}</td>
                         <td>{bud.category}</td>
-                        <td className="text-green-400 font-bold">&#x20B9;{bud.amount}</td>
+                        <td className={` ${calculateBalance(bud.category) < 1 ? 'text-red-600' : 'text-green-400' }  font-bold`}>
+                          &#x20B9;{calculateBalance(bud.category)}
+                        </td>
                       </tr>
                     ))}
                 </tbody>
