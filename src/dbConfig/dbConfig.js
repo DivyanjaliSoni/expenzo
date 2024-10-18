@@ -1,22 +1,23 @@
-import mongoose, { connection } from "mongoose";
+import mongoose from "mongoose";
 
-
-export default function connect (){
+export default function connect() {
     try {
-        mongoose.connect(process.env.MONGODB_URI);
+        mongoose.connect(process.env.MONGO_URL, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
 
-        const connection = mongoose.connection
-        connection.on('connected',()=>{
-            console.log("mongodb connected ")
-        })
+        const connection = mongoose.connection;
+        connection.on('connected', () => {
+            console.log("MongoDB connected");
+        });
 
-        connection.on('error',(error)=>{
-            console.log("mongoose connection failed" + error )
-            process.exit()
-        })
-        
+        connection.on('error', (error) => {
+            console.error("Mongoose connection failed: " + error);
+            process.exit();
+        });
+
     } catch (error) {
-        console.log("something went wrong")
-        console.log(error)
+        console.error("Something went wrong during MongoDB connection:", error);
     }
 }
