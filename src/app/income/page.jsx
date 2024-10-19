@@ -3,6 +3,9 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { updateIncome } from "../../store/incomeSlice";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 const Income = () => {
   const router = useRouter();
@@ -12,9 +15,19 @@ const Income = () => {
   const [newSource, setNewSource] = useState("");
   const [newAmount, setNewAmount] = useState("");
 
-  const handleUpdateIncome = () => {
+  const handleUpdateIncome = async(e) => {
+    e.preventDefault();
+    try {
     dispatch(updateIncome({ source: newSource, amount: newAmount }));
-    router.push("/");
+      const response = await axios.post('/api/income/create', {
+        user: Cookies.get("authUserId"),
+        source: newSource,
+        amount: newAmount,
+      });
+      router.push('/')
+    } catch (error) {
+      toast.error(error)
+    }
   };
   return (
     <section className="dark:bg-gray-900 px-2 min-h-[88vh] text-white">

@@ -1,12 +1,14 @@
 "use client";
 import { addExpense } from "@/store/expenseSlice";
+import axios from "axios";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const Expense = () => {
   const dispatch = useDispatch();
-  const budget = useSelector((state) => state.budget.items);
+  // const budget = useSelector((state) => state.budget.items);
+  const [allBudget, setAllBudget] = useState();
   const [newCategory, setNewCategory] = useState("");
   const [newAmount, setNewAmount] = useState("");
   const [newLabel, setNewLabel] = useState("");
@@ -24,6 +26,19 @@ const Expense = () => {
     );
     router.push("/");
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/api/budget/getall");
+        if (response && response.data) {
+          setAllBudget(response.data.budgets)
+        }
+      } catch (error) {
+        console.log("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <section className="dark:bg-gray-900 px-2 min-h-[88vh] text-white">
       <div className="px-5 py-10">
@@ -87,9 +102,9 @@ const Expense = () => {
             >
               <option selected>Select Category...</option>
               <option value="other">Other</option>
-              {budget.map((bud, index) => (
-                <option key={index} value={bud.category}>
-                  {bud.category}
+              {allBudget?.map((budget) => (
+                <option key={budget._id} value={budget.category}>
+                  {budget.category}
                 </option>
               ))}
             </select>

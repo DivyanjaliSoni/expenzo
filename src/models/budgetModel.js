@@ -1,15 +1,16 @@
 import mongoose from "mongoose";
 
-const incomeSchema = new mongoose.Schema(
+const budgetSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
-    source: {
+    category: {
       type: String,
       required: true,
     },
+    label: String,
     amount: {
       type: Number,
       required: true,
@@ -21,6 +22,6 @@ const incomeSchema = new mongoose.Schema(
   }
 );
 
-const Income = mongoose.models.Income || mongoose.model("Income", incomeSchema);
+const Income = mongoose.models.Budget || mongoose.model("Budget", budgetSchema);
 
 export default Income;

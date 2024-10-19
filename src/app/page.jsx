@@ -1,14 +1,26 @@
-"use client";
+"use client"
 import { FaPlus } from "react-icons/fa";
 import { MdDeleteOutline } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import Link from "next/link";
+import { AiOutlineLogout } from "react-icons/ai";
+import { toast, ToastContainer } from "react-toastify";
+import { useEffect } from "react";
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Home() {
   const income = useSelector((state) => state.income);
   const budget = useSelector((state) => state.budget.items);
   const expense = useSelector((state) => state.expense.items);
+  useEffect(()=>{
+    console.log(income.amount)
+    if(income.amount !== ''){
+      toast.success("Income updated successfully",{
+        theme:'dark'
+      })
+    }
+  })
   return (
     <section className="px-5 dark:bg-gray-900 min-h-[89vh] text-gray-800 dark:text-gray-100">
       <div className="py-10 flex flex-col gap-y-5 justify-center">
@@ -77,6 +89,8 @@ export default function Home() {
           </div>
         </div>
       </div>
+      <ToastContainer/>
     </section>
   );
 }
+

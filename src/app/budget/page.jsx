@@ -5,6 +5,9 @@ import { FaRegEdit } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { addBudget } from "@/store/budgetSlice";
+import { toast } from "react-toastify";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 const Budget = () => {
   const router = useRouter();
@@ -24,17 +27,32 @@ const Budget = () => {
     return budgetItem ? budgetItem.amount - totalExpenses : 0;
   };
 
-  const handleSubmit = () => {
-    setNewAmount("");
-    setNewCategory("");
-    setNewDesc("");
-    dispatch(
-      addBudget({
-        amount: newAmount,
-        description: newDesc,
+ 
+
+  const handleSubmit = async () => {
+    try {
+      dispatch(
+        addBudget({
+          amount: newAmount,
+          description: newDesc,
+          category: newCategory,
+        })
+      );
+      const response = await axios.post("/api/budget/create", {
+        user: Cookies.get("authUserId"),
         category: newCategory,
-      })
-    );
+        label: newDesc,
+        amount: newAmount,
+      });
+      if (response.status === 201) {
+        setNewAmount("");
+        setNewCategory("");
+        setNewDesc("");
+        router.push("/");
+      }
+    } catch (error) {
+      toast.error(error);
+    }
   };
 
   return (
@@ -144,7 +162,13 @@ const Budget = () => {
                       <tr className="my-2" key={index}>
                         <td>{bud.amount}</td>
                         <td>{bud.category}</td>
-                        <td className={` ${calculateBalance(bud.category) < 1 ? 'text-red-600' : 'text-green-400' }  font-bold`}>
+                        <td
+                          className={` ${
+                            calculateBalance(bud.category) < 1
+                              ? "text-red-600"
+                              : "text-green-400"
+                          }  font-bold`}
+                        >
                           &#x20B9;{calculateBalance(bud.category)}
                         </td>
                       </tr>

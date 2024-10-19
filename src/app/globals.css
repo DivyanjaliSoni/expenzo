@@ -29,3 +29,7 @@ td {
   padding: 10px 0;
   text-align: center;
 }
+.Toastify__toast{
+  max-width: 340px;
+  margin: 10px auto;
+}

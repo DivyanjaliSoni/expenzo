@@ -1,6 +1,10 @@
 "use client"; // Ensure this is needed for your environment
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Cookies from 'js-cookie';
+
 
 const Login = () => {
   const router = useRouter();
@@ -24,15 +28,19 @@ const Login = () => {
 
     if (res.ok) {
       setLoading(false);
-      document.cookie = `authToken=${data.token}; path=/`;
+      Cookies.set('authToken', data.token, { expires: 1, path: '/' });
+      Cookies.set('authUserId', data.user._id, { expires: 1, path: '/' });
       router.push("/");
     } else {
+      console.log(data.message)
       setLoading(false);
+      toast.error(data.message)
       console.error("Error:", data.message);
     }
   };
 
   return (
+    <>
     <form
       onSubmit={handleLogin}
       className="h-[80vh] flex justify-center items-center flex-col gap-4"
@@ -61,6 +69,8 @@ const Login = () => {
         <span>SignIn / SignUp</span>
       </button>
     </form>
+    <ToastContainer/>
+    </>
   );
 };
 
