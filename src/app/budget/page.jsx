@@ -1,7 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { MdDeleteOutline } from "react-icons/md";
-import { FaRegEdit } from "react-icons/fa";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { addBudget } from "@/store/budgetSlice";

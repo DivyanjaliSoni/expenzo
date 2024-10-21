@@ -1,10 +1,8 @@
 "use client"
 import { FaPlus } from "react-icons/fa";
-import { MdDeleteOutline } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import Link from "next/link";
-import { AiOutlineLogout } from "react-icons/ai";
 import { toast, ToastContainer } from "react-toastify";
 import { useEffect } from "react";
 import 'react-toastify/dist/ReactToastify.css';

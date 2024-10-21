@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import connect from "@/dbConfig/dbConfig";
 import Income from "@/models/income";
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   connect();
 
   const { user, source, amount } = await req.json();
