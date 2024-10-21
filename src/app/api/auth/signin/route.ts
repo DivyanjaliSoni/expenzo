@@ -16,7 +16,7 @@ const generateToken = (userId: string) => {
 
 // POST route handler
 export async function POST(req: NextRequest) {
-  await connect(); // Ensure connection to the database
+  connect(); // Ensure connection to the database
 
   try {
     const { email, password } = await req.json();
@@ -51,9 +51,6 @@ export async function POST(req: NextRequest) {
     }
   } catch (error) {
     console.error("Error processing request:", error);
-    return NextResponse.json(
-      { message: "Server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }
