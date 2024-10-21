@@ -46,6 +46,7 @@ export default function RootLayout({
                   className="text-2xl cursor-pointer"
                   onClick={() => {
                     Cookies.remove("authToken");
+                    Cookies.remove("authUserId");
                     router.push("/login");
                   }}
                 >
