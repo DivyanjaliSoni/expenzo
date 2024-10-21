@@ -1,7 +1,7 @@
 "use client"; // Ensure this is needed for your environment
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -29,6 +29,7 @@ const Login = () => {
       });
       router.push("/");
     } catch (error) {
+      console.log(error)
       setLoading(false);
     }
   };
