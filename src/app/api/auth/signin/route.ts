@@ -1,61 +1,59 @@
+// src/app/api/auth/signin/route.ts
+
 import connect from "@/dbConfig/dbConfig";
 import User from "@/models/userModel";
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 
-const SECRET_KEY = process.env.JWT_SECRET || 'your-secret-key'; // Use a strong secret key
+const SECRET_KEY = process.env.JWT_SECRET || "your-secret-key";
 
-export const generateToken = (userId: string) => {
-    const payload = { id: userId };
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' }); // Token will expire in 1 hour
-    return token;
+// Utility function to generate JWT token
+const generateToken = (userId: string) => {
+  const payload = { id: userId };
+  return jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
 };
 
+// POST route handler
 export async function POST(req: NextRequest) {
-  connect(); 
-
-  const { email, password } = await req.json(); 
-
-  console.log(email, password);
+  await connect(); // Ensure connection to the database
 
   try {
-      let user = await User.findOne({ email });
+    const { email, password } = await req.json();
+    console.log(email, password);
 
-      if (user) {
-          const isMatch = await bcrypt.compare(password, user.password);
-          if (isMatch) {
-            const token = generateToken(user._id.toString());
-              return NextResponse.json(
-                  { message: "Login successful", user,token },
-                  { status: 200 }
-              );
-          } else {
-              return NextResponse.json(
-                  { message: "Invalid credentials" },
-                  { status: 401 }
-              );
-          }
+    let user = await User.findOne({ email });
+
+    if (user) {
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (isMatch) {
+        const token = generateToken(user._id.toString());
+        return NextResponse.json(
+          { message: "Login successful", user, token },
+          { status: 200 }
+        );
       } else {
-          const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
-
-          user = new User({
-              email,
-              password: hashedPassword,
-          });
-
-          await user.save(); 
-          const token = generateToken(user._id.toString());
-          return NextResponse.json(
-              { message: "User created", user,token },
-              { status: 201 }
-          );
+        return NextResponse.json(
+          { message: "Invalid credentials" },
+          { status: 401 }
+        );
       }
-  } catch (error) {
-      console.error("Error processing request:", error);
+    } else {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      user = new User({ email, password: hashedPassword });
+      await user.save();
+
+      const token = generateToken(user._id.toString());
       return NextResponse.json(
-          { message: "Server error" },
-          { status: 500 }
+        { message: "User created", user, token },
+        { status: 201 }
       );
+    }
+  } catch (error) {
+    console.error("Error processing request:", error);
+    return NextResponse.json(
+      { message: "Server error" },
+      { status: 500 }
+    );
   }
 }
