@@ -11,7 +11,7 @@ const expenseSchema = new mongoose.Schema(
       ref: "Budget",
       required: true,
     },
-    Product: {
+    product: {
       type: String,
       required: true,
     },

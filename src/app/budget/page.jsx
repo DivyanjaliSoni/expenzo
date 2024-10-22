@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { addBudget } from "@/store/budgetSlice";
@@ -13,7 +13,8 @@ const Budget = () => {
   const [newCategory, setNewCategory] = useState("");
   const [newAmount, setNewAmount] = useState("");
   const [newDesc, setNewDesc] = useState("");
-  const budget = useSelector((state) => state.budget.items);
+  // const budget = useSelector((state) => state.budget.items);
+  const [budget,setBudget] = useState()
   const expense = useSelector((state) => state.expense.items);
 
   const calculateBalance = (category) => {
@@ -25,6 +26,21 @@ const Budget = () => {
     return budgetItem ? budgetItem.amount - totalExpenses : 0;
   };
 
+  useEffect(() => {
+    const fetchBudget = async () => {
+      try {
+        const response = await axios.post("/api/budget/getall",{
+          id:Cookies.get("authUserId")
+        });
+        if (response && response.data) {
+          setBudget(response.data.budgets)
+        }
+      } catch (error) {
+        console.log("Error fetching data:", error);
+      }
+    };
+    fetchBudget();
+  }, []);
  
 
   const handleSubmit = async () => {
@@ -41,13 +57,15 @@ const Budget = () => {
         category: newCategory,
         label: newDesc,
         amount: newAmount,
-      });
-      if (response.status === 201) {
+      }).then((res)=>{
+        console.log(res)
+        setBudget((prevItems) => [...prevItems, res.data.budget]);
         setNewAmount("");
         setNewCategory("");
         setNewDesc("");
-        router.push("/");
-      }
+      }).catch((err)=>{
+        console.log(err)
+      })
     } catch (error) {
       toast.error(error);
     }
