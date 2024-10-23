@@ -5,17 +5,6 @@ import mongoose from "mongoose";
 
 export async function POST(req: NextRequest) {
   const { user, budget, product, amount } = await req.json();
-  console.log(
-    "user:",
-    user,
-    "budget",
-    budget,
-    "product",
-    product,
-    "amount",
-    amount
-  );
-
   try {
     await connect();
 
@@ -31,12 +20,11 @@ export async function POST(req: NextRequest) {
       product,
       amount,
     });
-    console.log(newExpense)
-    // await newExpense.save();
-    // return NextResponse.json(
-    //   { message: "Expense record created" },
-    //   { status: 201 }
-    // );
+    await newExpense.save();
+    return NextResponse.json(
+      { message: "Expense record created" },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("Error creating Expense record:", error);
     return NextResponse.json(

@@ -40,19 +40,28 @@ const Budget = () => {
       }
     };
     fetchBudget();
+    const fetchExpense = async () => {
+      await axios
+        .post("/api/expense/getexpenses", {
+          id: Cookies.get("authUserId"),
+        })
+        .then((res) => {
+          console.log(res.data.expense)
+        //   res.data.expense.reduce((accumulator, expense) => {
+        //     console.log(accumulator + expense.amount)
+        // }, 0);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    fetchExpense();
   }, []);
  
 
   const handleSubmit = async () => {
     try {
-      dispatch(
-        addBudget({
-          amount: newAmount,
-          description: newDesc,
-          category: newCategory,
-        })
-      );
-      const response = await axios.post("/api/budget/create", {
+      await axios.post("/api/budget/create", {
         user: Cookies.get("authUserId"),
         category: newCategory,
         label: newDesc,

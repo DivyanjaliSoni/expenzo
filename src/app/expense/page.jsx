@@ -22,11 +22,11 @@ const Expense = () => {
         budget: selectedCategory._id,
         product,
         amount: Number(amount),
-      });
-      console.log(response);
-
-      // Log the response if successful
-      console.log("Expense created:", response.data);
+      }).then((res)=>{
+        setCategory('')
+        setAmount('')
+        setProduct('')
+      })
     } catch (error) {
       // Improved error handling
       if (axios.isAxiosError(error)) {

@@ -1,6 +1,5 @@
 "use client";
-import { FaPlus } from "react-icons/fa";
-import { FaRegEdit } from "react-icons/fa";
+import { FaPlus, FaRegEdit } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import Link from "next/link";
 import { ToastContainer } from "react-toastify";
@@ -8,27 +7,45 @@ import { useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
 import axios from "axios";
+import HomeLoading  from "./Components/homeLoading/page";
 
 export default function Home() {
-  const [income, setInome] = useState('')
-  // const income = useSelector((state) => state.income);
+  const [income, setInome] = useState("");
+  const [expenses, setExpenses] = useState();
+  const [loading, setLoading] = useState(true);
   const budget = useSelector((state) => state.budget.items);
-  const expense = useSelector((state) => state.expense.items);
   useEffect(() => {
     const fetchIncome = async () => {
       await axios
-        .post("/api/income/getincome",{
-          id:Cookies.get("authUserId")
+        .post("/api/income/getincome", {
+          id: Cookies.get("authUserId"),
         })
         .then((res) => {
-          setInome(res.data.income[0].amount)
+          setInome(res.data.income[0].amount);
         })
         .catch((err) => {
           console.log(err);
         });
     };
-    fetchIncome()
-  });
+    fetchIncome();
+    const fetchExpense = async () => {
+      setLoading(true);
+      await axios
+        .post("/api/expense/getexpenses", {
+          id: Cookies.get("authUserId"),
+        })
+        .then((res) => {
+          setLoading(false);
+          setExpenses(res.data.expense);
+        })
+        .catch((err) => {
+          setLoading(false);
+          console.log(err);
+        });
+    };
+    fetchExpense();
+  }, []);
+
   return (
     <section className="px-5 dark:bg-gray-900 min-h-[89vh] text-gray-800 dark:text-gray-100">
       <div className="py-10 flex flex-col gap-y-5 justify-center">
@@ -67,34 +84,31 @@ export default function Home() {
           </div>
           <div>
             <div>
-              <table className="w-full">
-                <thead className="font-bold dark:bg-gray-400 bg-gray-500 text-white">
-                  <tr>
-                    <td>Product</td>
-                    <td>Category</td>
-                    <td>Amount</td>
-                    <td>Actions</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  {expense &&
-                    expense.map((exp, index) => (
-                      <tr className="my-2" key={index}>
-                        <td>{exp.label}</td>
-                        <td>{exp.category}</td>
-                        <td className="text-red-400 font-bold">
-                          - &#x20B9;{exp.amount}
-                        </td>
-                        <td>
-                          <div className="flex gap-4 text-2xl items-center justify-center">
-                            {/* <MdDeleteOutline className="text-red-700 cursor-pointer" /> */}
-                            <FaRegEdit className="text-gray-500 cursor-pointer" />
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
+              { !loading ? (
+                <table className="w-full">
+                  <thead className="font-bold dark:bg-gray-400 bg-gray-500 text-white">
+                    <tr>
+                      <td>Product</td>
+                      <td>Category</td>
+                      <td>Amount</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {expenses &&
+                      expenses.map((exp, index) => (
+                        <tr className="my-2" key={index}>
+                          <td>{exp.product}</td>
+                          <td>{exp.budget.category}</td>
+                          <td className="text-red-400 font-bold">
+                            - &#x20B9;{exp.amount}
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              ) : (
+                <HomeLoading/>
+              )}
             </div>
           </div>
         </div>
