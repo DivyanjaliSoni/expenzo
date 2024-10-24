@@ -4,7 +4,6 @@ import { Nunito } from "next/font/google";
 import { useState } from "react";
 import { FaRegLightbulb } from "react-icons/fa6";
 import { FaLightbulb } from "react-icons/fa6";
-import { Provider } from "react-redux";
 import { AiOutlineLogout } from "react-icons/ai";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
