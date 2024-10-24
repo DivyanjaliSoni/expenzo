@@ -1,6 +1,5 @@
 "use client";
 import { FaPlus } from "react-icons/fa";
-import { useSelector } from "react-redux";
 import Link from "next/link";
 import { ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
@@ -13,7 +12,6 @@ export default function Home() {
   const [income, setInome] = useState("");
   const [expenses, setExpenses] = useState();
   const [loading, setLoading] = useState(false);
-  const budget = useSelector((state) => state.budget.items);
   useEffect(() => {
     const fetchIncome = async () => {
       await axios

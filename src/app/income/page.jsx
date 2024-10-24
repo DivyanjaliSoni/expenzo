@@ -1,7 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { updateIncome } from "../../store/incomeSlice";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -10,15 +8,12 @@ import { toast } from "react-toastify";
 const Income = () => {
   const router = useRouter();
 
-  const dispatch = useDispatch();
-
   const [newSource, setNewSource] = useState("");
   const [newAmount, setNewAmount] = useState("");
 
   const handleUpdateIncome = async(e) => {
     e.preventDefault();
     try {
-    dispatch(updateIncome({ source: newSource, amount: newAmount }));
        await axios.post('/api/income/create', {
         user: Cookies.get("authUserId"),
         source: newSource,
