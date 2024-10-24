@@ -14,10 +14,6 @@ export async function POST(req: NextRequest) {
         { category },
         { $set: { amount } }
       );
-      return NextResponse.json(
-        { message: "Budget Updated" },
-        { status: 200 }
-      );
     }
     const newBudget = new Budget({ user, category, label, amount } );
     await newBudget.save();

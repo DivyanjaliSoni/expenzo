@@ -168,7 +168,6 @@ const Budget = () => {
               <table className="w-full">
                 <thead className="font-bold dark:bg-gray-400 bg-gray-500 text-white">
                   <tr>
-                    <td>Amount</td>
                     <td>Category</td>
                     <td>Budget</td>
                     <td>Balance</td>
@@ -178,9 +177,12 @@ const Budget = () => {
                   {budget &&
                     budget.map((bud, index) => (
                       <tr className="my-2" key={index}>
-                        <td>{bud.amount}</td>
                         <td>{bud.category}</td>
-                        <td>
+                        <td className={` ${
+                            bud.amount < 1
+                              ? "text-red-600"
+                              : "text-green-400"
+                          }  font-bold`}>
                           &#x20B9;{bud.amount}
                         </td>
                         <td className={` ${
