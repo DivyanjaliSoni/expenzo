@@ -1,5 +1,5 @@
 "use client";
-import { FaPlus, FaRegEdit } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import Link from "next/link";
 import { ToastContainer } from "react-toastify";

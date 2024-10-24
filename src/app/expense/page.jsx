@@ -18,12 +18,11 @@ const Expense = () => {
         budget: selectedCategory._id,
         product,
         amount: Number(amount),
-      }).then((res)=>{
-        toast.success("Expense added")
+      })
+      toast.success("Expense added")
         setCategory('')
         setAmount('')
         setProduct('')
-      })
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error("Axios error:", error.response?.data || error.message);

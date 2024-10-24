@@ -19,7 +19,7 @@ const Income = () => {
     e.preventDefault();
     try {
     dispatch(updateIncome({ source: newSource, amount: newAmount }));
-      const response = await axios.post('/api/income/create', {
+       await axios.post('/api/income/create', {
         user: Cookies.get("authUserId"),
         source: newSource,
         amount: newAmount,

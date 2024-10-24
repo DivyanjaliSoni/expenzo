@@ -2,21 +2,16 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
-import { addBudget } from "@/store/budgetSlice";
 import { toast } from "react-toastify";
 import axios from "axios";
 import Cookies from "js-cookie";
 
 const Budget = () => {
   const router = useRouter();
-  const dispatch = useDispatch();
   const [newCategory, setNewCategory] = useState("");
   const [newAmount, setNewAmount] = useState("");
   const [newDesc, setNewDesc] = useState("");
-  // const budget = useSelector((state) => state.budget.items);
   const [budget,setBudget] = useState()
-  const expense = useSelector((state) => state.expense.items);
-
  
   useEffect(() => {
     const fetchBudget = async () => {
@@ -26,15 +21,13 @@ const Budget = () => {
         });
   
         if (response && response.data) {
-          
-          // Calculate remaining amounts and update state
           const updatedBudgets = response.data.budgets.map((budget) => {
             const totalExpenses = budget.expenses.reduce((sum, expense) => sum + expense.amount, 0);
             const remainingAmount = budget.amount - totalExpenses;
   
             return {
               ...budget,
-              remainingAmount, // Add remaining amount to the budget object
+              remainingAmount, 
             };
           });
   
