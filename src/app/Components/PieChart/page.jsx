@@ -94,7 +94,7 @@ const PieChart = () => {
 
   return (
     <>
-      <Pie data={dataForPieChart} options={options} className="pb-5" />
+      <Pie data={dataForPieChart} options={options} className="pb-5 max-w-96 max-h-96" />
     </>
   );
 };
