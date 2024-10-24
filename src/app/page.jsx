@@ -7,11 +7,15 @@ import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
 import axios from "axios";
 import HomeLoading from "./Components/homeLoading/page";
+import PieChart from "./Components/PieChart/page";
+import { LuTable } from "react-icons/lu";
+import { FaChartPie } from "react-icons/fa6";
 
 export default function Home() {
   const [income, setInome] = useState("");
   const [expenses, setExpenses] = useState();
   const [loading, setLoading] = useState(false);
+  const [showChart, setShowChart] = useState(false);
   useEffect(() => {
     const fetchIncome = async () => {
       await axios
@@ -27,17 +31,17 @@ export default function Home() {
     };
     fetchIncome();
     const fetchBudget = async () => {
-      setLoading(true)
+      setLoading(true);
       try {
         const response = await axios.post("/api/budget/getall", {
           id: Cookies.get("authUserId"),
         });
         if (response && response.data) {
-          setLoading(false)
+          setLoading(false);
           const expensesArray = response.data.budgets.flatMap((budget) =>
             budget.expenses.map((expense) => ({
-              ...expense,        // Expense ki properties
-              category: budget.category // Budget ka category add karna
+              ...expense, // Expense ki properties
+              category: budget.category, // Budget ka category add karna
             }))
           );
           setExpenses(expensesArray);
@@ -65,7 +69,7 @@ export default function Home() {
             href="/budget"
             className="bg-gray-800 dark:bg-gray-700 text-white py-2 w-36 block mx-auto"
           >
-             Set Budget
+            Set Budget
           </Link>
         </div>
         <div className="text-center">
@@ -82,40 +86,58 @@ export default function Home() {
       </div>
       <div>
         <div>
-          <div className="border-b border-gray-500 dark:border-gray-200 mb-5">
-            <h3 className="text-xl font-bold pb-2">Transaction History</h3>
-          </div>
-          <div>
-            <div>
-              {!loading ? (
-                <table className="w-full">
-                  <thead className="font-bold dark:bg-gray-400 bg-gray-500 text-white">
-                    <tr>
-                      <td>Product</td>
-                      <td>Category</td>
-                      <td>Amount</td>
-                      <td>Date</td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {expenses &&
-                      expenses.map((exp, index) => (
-                        <tr className="my-2" key={index}>
-                          <td>{exp.product}</td>
-                          <td>{exp.category}</td>
-                          <td className="text-red-400 font-bold">
-                            - &#x20B9;{exp.amount}
-                          </td>
-                          <td>{new Date().toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }) }</td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
-              ) : (
-                <HomeLoading />
-              )}
+          <div className="flex justify-between items-center border-b border-gray-500 dark:border-gray-200 mb-5">
+            <div className="">
+              <h3 className="text-xl font-bold pb-2">Transaction History</h3>
+            </div>
+            <div className="text-2xl flex gap-3 items-center">
+              <LuTable onClick={()=>setShowChart(false)} className="cursor-pointer"/>
+              <FaChartPie onClick={()=>setShowChart(true)} className="cursor-pointer"/>
             </div>
           </div>
+          {showChart ? (
+            <div>
+              <PieChart />
+            </div>
+          ) : (
+            <div>
+              <div>
+                {!loading ? (
+                  <table className="w-full">
+                    <thead className="font-bold dark:bg-gray-400 bg-gray-500 text-white">
+                      <tr>
+                        <td>Product</td>
+                        <td>Category</td>
+                        <td>Amount</td>
+                        <td>Date</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {expenses &&
+                        expenses.map((exp, index) => (
+                          <tr className="my-2" key={index}>
+                            <td>{exp.product}</td>
+                            <td>{exp.category}</td>
+                            <td className="text-red-400 font-bold">
+                              - &#x20B9;{exp.amount}
+                            </td>
+                            <td>
+                              {new Date().toLocaleDateString("en-US", {
+                                year: "numeric",
+                                month: "2-digit",
+                                day: "2-digit",
+                              })}
+                            </td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <HomeLoading />
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
       <ToastContainer />
