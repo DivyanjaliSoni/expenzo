@@ -48,11 +48,11 @@ const PieChart = () => {
     const backgroundColor = [];
     const borderColor = [];
     for (let i = 0; i < count; i++) {
-      const r = Math.floor(Math.random() * 128 + 128); // Light red
-      const g = Math.floor(Math.random() * 128 + 128); // Light green
-      const b = Math.floor(Math.random() * 128 + 128); // Light blue
-      backgroundColor.push(`rgba(${r}, ${g}, ${b}, 0.6)`); // Slightly transparent
-      borderColor.push(`rgba(${r}, ${g}, ${b}, 1)`); // Fully opaque
+      const r = Math.floor(Math.random() * 128 + 128);
+      const g = Math.floor(Math.random() * 128 + 128);
+      const b = Math.floor(Math.random() * 128 + 128);
+      backgroundColor.push(`rgba(${r}, ${g}, ${b}, 0.6)`);
+      borderColor.push(`rgba(${r}, ${g}, ${b}, 1)`);
     }
     return { backgroundColor, borderColor };
   };
