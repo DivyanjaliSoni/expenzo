@@ -28,6 +28,10 @@ body {
 td {
   padding: 10px 0;
   text-align: center;
+  border-right: 1px solid #565656;
+}
+td:last-of-type{
+  border: none;
 }
 .Toastify__toast{
   max-width: 340px;

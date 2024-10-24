@@ -1,14 +1,11 @@
 "use client";
-import { addExpense } from "@/store/expenseSlice";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
+import { toast, ToastContainer } from "react-toastify";
 
 const Expense = () => {
-  const dispatch = useDispatch();
-  // const budget = useSelector((state) => state.budget.items);
   const [allBudget, setAllBudget] = useState();
   const [selectedCategory, setSelectedCatgeory] = useState();
   const [Category, setCategory] = useState("");
@@ -17,20 +14,18 @@ const Expense = () => {
   const router = useRouter();
   const handleSubmit = async () => {
     try {
-      const response = await axios.post("/api/expense/create", {
-        user: Cookies.get("authUserId"),
+       await axios.post("/api/expense/create", {
         budget: selectedCategory._id,
         product,
         amount: Number(amount),
       }).then((res)=>{
+        toast.success("Expense added")
         setCategory('')
         setAmount('')
         setProduct('')
       })
     } catch (error) {
-      // Improved error handling
       if (axios.isAxiosError(error)) {
-        // Check if it's an Axios error
         console.error("Axios error:", error.response?.data || error.message);
       } else {
         console.error("Unexpected error:", error);
@@ -126,7 +121,7 @@ const Expense = () => {
               <option value="" disabled>
                 Select Category...
               </option>
-              <option value="other">Other</option>
+              {/* <option value="other">Other</option> */}
               {allBudget?.map((budget) => (
                 <option key={budget._id} value={budget.category}>
                   {budget.category}
@@ -155,6 +150,7 @@ const Expense = () => {
           </div>
         </div>
       </div>
+      <ToastContainer theme="dark"/>
     </section>
   );
 };

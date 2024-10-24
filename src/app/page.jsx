@@ -7,12 +7,12 @@ import { useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
 import axios from "axios";
-import HomeLoading  from "./Components/homeLoading/page";
+import HomeLoading from "./Components/homeLoading/page";
 
 export default function Home() {
   const [income, setInome] = useState("");
   const [expenses, setExpenses] = useState();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const budget = useSelector((state) => state.budget.items);
   useEffect(() => {
     const fetchIncome = async () => {
@@ -28,22 +28,27 @@ export default function Home() {
         });
     };
     fetchIncome();
-    const fetchExpense = async () => {
-      setLoading(true);
-      await axios
-        .post("/api/expense/getexpenses", {
+    const fetchBudget = async () => {
+      setLoading(true)
+      try {
+        const response = await axios.post("/api/budget/getall", {
           id: Cookies.get("authUserId"),
-        })
-        .then((res) => {
-          setLoading(false);
-          setExpenses(res.data.expense);
-        })
-        .catch((err) => {
-          setLoading(false);
-          console.log(err);
         });
+        if (response && response.data) {
+          setLoading(false)
+          const expensesArray = response.data.budgets.flatMap((budget) =>
+            budget.expenses.map((expense) => ({
+              ...expense,        // Expense ki properties
+              category: budget.category // Budget ka category add karna
+            }))
+          );
+          setExpenses(expensesArray);
+        }
+      } catch (error) {
+        console.log("Error fetching data:", error);
+      }
     };
-    fetchExpense();
+    fetchBudget();
   }, []);
 
   return (
@@ -84,13 +89,14 @@ export default function Home() {
           </div>
           <div>
             <div>
-              { !loading ? (
+              {!loading ? (
                 <table className="w-full">
                   <thead className="font-bold dark:bg-gray-400 bg-gray-500 text-white">
                     <tr>
                       <td>Product</td>
                       <td>Category</td>
                       <td>Amount</td>
+                      <td>Date</td>
                     </tr>
                   </thead>
                   <tbody>
@@ -98,16 +104,17 @@ export default function Home() {
                       expenses.map((exp, index) => (
                         <tr className="my-2" key={index}>
                           <td>{exp.product}</td>
-                          <td>{exp.budget.category}</td>
+                          <td>{exp.category}</td>
                           <td className="text-red-400 font-bold">
                             - &#x20B9;{exp.amount}
                           </td>
+                          <td>{new Date().toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' }) }</td>
                         </tr>
                       ))}
                   </tbody>
                 </table>
               ) : (
-                <HomeLoading/>
+                <HomeLoading />
               )}
             </div>
           </div>

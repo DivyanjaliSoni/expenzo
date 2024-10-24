@@ -8,6 +8,7 @@ const HomeLoading = () => {
           <td>Product</td>
           <td>Category</td>
           <td>Amount</td>
+          <td>Date</td>
         </tr>
       </thead>
       <tbody>
@@ -21,6 +22,9 @@ const HomeLoading = () => {
           <td className="text-red-400 font-bold">
             <div className="bg-gray-500 min-h-8 w-full"></div>
           </td>
+          <td className="text-red-400 font-bold">
+            <div className="bg-gray-500 min-h-8 w-full"></div>
+          </td>
         </tr>
         <tr className="my-2">
           <td>
@@ -32,12 +36,18 @@ const HomeLoading = () => {
           <td className="text-red-400 font-bold">
             <div className="bg-gray-500 min-h-8 w-full"></div>
           </td>
+          <td className="text-red-400 font-bold">
+            <div className="bg-gray-500 min-h-8 w-full"></div>
+          </td>
         </tr>
         <tr className="my-2">
           <td>
             <div className="bg-gray-500 min-h-8 w-full"></div>
           </td>
           <td>
+            <div className="bg-gray-500 min-h-8 w-full"></div>
+          </td>
+          <td className="text-red-400 font-bold">
             <div className="bg-gray-500 min-h-8 w-full"></div>
           </td>
           <td className="text-red-400 font-bold">

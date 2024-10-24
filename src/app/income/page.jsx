@@ -24,7 +24,6 @@ const Income = () => {
         source: newSource,
         amount: newAmount,
       });
-      console.log(response)
       router.push('/')
     } catch (error) {
       toast.error(error)

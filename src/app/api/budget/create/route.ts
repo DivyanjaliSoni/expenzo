@@ -6,7 +6,6 @@ export async function POST(req: NextRequest) {
   connect();
 
   const { user, category, label, amount } = await req.json();
-  console.log(user, category, label, amount)
 
   try {
     const BudgetWithUser = await Budget.findOne({ category });

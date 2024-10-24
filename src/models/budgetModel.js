@@ -1,5 +1,17 @@
 import mongoose from "mongoose";
 
+const expenseSchema = new mongoose.Schema({
+  product: {
+    type: String,
+    required: true,
+  },
+  amount: {
+    type: Number,
+    required: true,
+    min: 0,
+  },
+});
+
 const budgetSchema = new mongoose.Schema(
   {
     user: {
@@ -16,6 +28,7 @@ const budgetSchema = new mongoose.Schema(
       required: true,
       min: 0,
     },
+    expenses: [expenseSchema],
   },
   {
     timestamps: true,

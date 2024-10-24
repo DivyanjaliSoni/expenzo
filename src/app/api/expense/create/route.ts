@@ -1,30 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import connect from "@/dbConfig/dbConfig";
-import Expense from "@/models/expenseModel";
-import mongoose from "mongoose";
+import Budget from "@/models/budgetModel";
+
 
 export async function POST(req: NextRequest) {
-  const { user, budget, product, amount } = await req.json();
+  const { budget, product, amount } = await req.json();
   try {
     await connect();
-
-    const ExpenseWithUser = await Expense.findOne({ product });
-    console.log(ExpenseWithUser);
+    const ExpenseWithUser = await Budget.findOne({ _id:budget });
     if (ExpenseWithUser) {
-      await Expense.updateOne({ product }, { $set: { amount, budget } });
-      return NextResponse.json({ message: "Expense Updated" }, { status: 200 });
+      await Budget.updateOne(
+        { _id: budget}, 
+        { $push: { expenses: { product, amount } } }
+      );
+      return NextResponse.json({ message: "Expense Updated",ExpenseWithUser }, { status: 200 });
     }
-    const newExpense = new Expense({
-      user: new mongoose.Types.ObjectId(user),
-      budget: new mongoose.Types.ObjectId(budget),
-      product,
-      amount,
-    });
-    await newExpense.save();
-    return NextResponse.json(
-      { message: "Expense record created" },
-      { status: 201 }
-    );
+    return NextResponse.json({ message: "Error occured" }, { status: 501 });
   } catch (error) {
     console.error("Error creating Expense record:", error);
     return NextResponse.json(

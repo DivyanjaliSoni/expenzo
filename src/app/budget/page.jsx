@@ -17,46 +17,37 @@ const Budget = () => {
   const [budget,setBudget] = useState()
   const expense = useSelector((state) => state.expense.items);
 
-  const calculateBalance = (category) => {
-    const budgetItem = budget.find((bud) => bud.category === category);
-    const totalExpenses = expense
-      .filter((exp) => exp.category === category)
-      .reduce((total, exp) => total + Number(exp.amount), 0);
-
-    return budgetItem ? budgetItem.amount - totalExpenses : 0;
-  };
-
+ 
   useEffect(() => {
     const fetchBudget = async () => {
       try {
-        const response = await axios.post("/api/budget/getall",{
-          id:Cookies.get("authUserId")
+        const response = await axios.post("/api/budget/getall", {
+          id: Cookies.get("authUserId"),
         });
+  
         if (response && response.data) {
-          setBudget(response.data.budgets)
+          
+          // Calculate remaining amounts and update state
+          const updatedBudgets = response.data.budgets.map((budget) => {
+            const totalExpenses = budget.expenses.reduce((sum, expense) => sum + expense.amount, 0);
+            const remainingAmount = budget.amount - totalExpenses;
+  
+            return {
+              ...budget,
+              remainingAmount, // Add remaining amount to the budget object
+            };
+          });
+  
+          setBudget(updatedBudgets); 
         }
       } catch (error) {
         console.log("Error fetching data:", error);
       }
     };
+  
     fetchBudget();
-    const fetchExpense = async () => {
-      await axios
-        .post("/api/expense/getexpenses", {
-          id: Cookies.get("authUserId"),
-        })
-        .then((res) => {
-          console.log(res.data.expense)
-        //   res.data.expense.reduce((accumulator, expense) => {
-        //     console.log(accumulator + expense.amount)
-        // }, 0);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-    fetchExpense();
   }, []);
+  
  
 
   const handleSubmit = async () => {
@@ -67,7 +58,6 @@ const Budget = () => {
         label: newDesc,
         amount: newAmount,
       }).then((res)=>{
-        console.log(res)
         setBudget((prevItems) => [...prevItems, res.data.budget]);
         setNewAmount("");
         setNewCategory("");
@@ -178,7 +168,8 @@ const Budget = () => {
                   <tr>
                     <td>Amount</td>
                     <td>Category</td>
-                    <td>balance</td>
+                    <td>Budget</td>
+                    <td>Balance</td>
                   </tr>
                 </thead>
                 <tbody className="dark:text-white text-gray-800">
@@ -187,15 +178,14 @@ const Budget = () => {
                       <tr className="my-2" key={index}>
                         <td>{bud.amount}</td>
                         <td>{bud.category}</td>
-                        <td
-                          className={` ${
-                            calculateBalance(bud.category) < 1
+                        <td>
+                          &#x20B9;{bud.amount}
+                        </td>
+                        <td className={` ${
+                            bud.remainingAmount < 1
                               ? "text-red-600"
                               : "text-green-400"
-                          }  font-bold`}
-                        >
-                          &#x20B9;{calculateBalance(bud.category)}
-                        </td>
+                          }  font-bold`}>&#x20B9;{bud.remainingAmount}</td>
                       </tr>
                     ))}
                 </tbody>
