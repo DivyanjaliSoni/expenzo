@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 ChartJS.register(ArcElement, Tooltip, Legend, Title);
 
 const PieChart = () => {
+  const [pieTitle, setPieTitle] = useState("Balance Amount");
   const [budgetCategory, setBudgetCategory] = useState([]);
   const [budgetCategoryTotalExpense, setBudgetCategoryTotalExpense] = useState([]);
 
@@ -77,12 +78,23 @@ const PieChart = () => {
       legend: {
         position: "top",
       },
+      title: {
+        display: true,
+        text: pieTitle,
+      },
     },
   };
 
+  useEffect(()=>{
+    if(budgetCategoryTotalExpense.length === 1 && budgetCategoryTotalExpense[0] === 0){
+        setPieTitle('No Balance')
+        console.log(options.plugins.title.text)
+    }
+  },[budgetCategoryTotalExpense])
+
   return (
     <>
-      <Pie data={dataForPieChart} options={options} className="pb-5"/>
+      <Pie data={dataForPieChart} options={options} className="pb-5" />
     </>
   );
 };
