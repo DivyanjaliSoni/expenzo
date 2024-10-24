@@ -1,12 +1,12 @@
 "use client";
 import "./globals.css";
 import { Nunito } from "next/font/google";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaRegLightbulb } from "react-icons/fa6";
 import { FaLightbulb } from "react-icons/fa6";
 import { AiOutlineLogout } from "react-icons/ai";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -16,8 +16,29 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [isDarkMode, setIsDarkMode] = useState(true);
+
+  const pathname = usePathname();
   const router = useRouter();
+
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const checkAuth = () => {
+    const token = Cookies.get("authToken");
+    setIsAuthenticated(!!token);
+  };
+
+  useEffect(() => {
+    checkAuth();
+  }, [pathname]); 
+
+  const handleLogout = () => {
+    Cookies.remove("authToken");
+    Cookies.remove("authUserId");
+    setIsAuthenticated(false);
+    router.push("/login");
+  };
+
   return (
     <html lang="en" className={isDarkMode ? "dark" : ""}>
       <head>
@@ -27,18 +48,19 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body className={nunito.className}>
-          <header className="fixed top-0 w-full p-5 dark:bg-gray-700 dark:text-white bg-white border-b text-gray-800">
-            <div className="flex justify-between items-center">
-              <div className="text-2xl [text-shadow:1px_1px_2px_#565656]">
-                EXPENZO
+        <header className="fixed top-0 w-full p-5 dark:bg-gray-700 dark:text-white bg-white border-b text-gray-800">
+          <div className="flex justify-between items-center">
+            <div className="text-2xl [text-shadow:1px_1px_2px_#565656]">
+              EXPENZO
+            </div>
+            <div className="flex gap-4 justify-center items-center">
+              <div
+                className="text-2xl cursor-pointer"
+                onClick={() => setIsDarkMode(!isDarkMode)}
+              >
+                {isDarkMode ? <FaRegLightbulb /> : <FaLightbulb />}
               </div>
-              <div className="flex gap-4 justify-center items-center">
-                <div
-                  className="text-2xl cursor-pointer"
-                  onClick={() => setIsDarkMode(!isDarkMode)}
-                >
-                  {isDarkMode ? <FaRegLightbulb /> : <FaLightbulb />}
-                </div>
+              {isAuthenticated && (
                 <div
                   className="text-2xl cursor-pointer"
                   onClick={() => {
@@ -49,10 +71,11 @@ export default function RootLayout({
                 >
                   <AiOutlineLogout />
                 </div>
-              </div>
+              )}
             </div>
-          </header>
-          <main className="mt-[71px]">{children}</main>
+          </div>
+        </header>
+        <main className="mt-[71px]">{children}</main>
       </body>
     </html>
   );

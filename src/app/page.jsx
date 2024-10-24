@@ -65,7 +65,7 @@ export default function Home() {
             href="/budget"
             className="bg-gray-800 dark:bg-gray-700 text-white py-2 w-36 block mx-auto"
           >
-            {budget.length !== 0 ? "Show Budget" : "Set Budget"}
+             Set Budget
           </Link>
         </div>
         <div className="text-center">

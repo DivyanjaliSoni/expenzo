@@ -10,6 +10,7 @@ const Budget = () => {
   const [newCategory, setNewCategory] = useState("");
   const [newAmount, setNewAmount] = useState("");
   const [newDesc, setNewDesc] = useState("");
+  const [remainingBalance, setRemainingBalance] = useState();
   const [budget,setBudget] = useState()
  
   useEffect(() => {
@@ -50,7 +51,13 @@ const Budget = () => {
         label: newDesc,
         amount: newAmount,
       }).then((res)=>{
-        setBudget((prevItems) => [...prevItems, res.data.budget]);
+        setBudget((prevItems) => [
+          ...prevItems,
+          {
+            ...res.data.budget,
+            remainingAmount: newAmount,
+          },
+        ]);
         setNewAmount("");
         setNewCategory("");
         setNewDesc("");
@@ -125,7 +132,10 @@ const Budget = () => {
                 id="inline-full-name"
                 placeholder="e.g. Healthy diet"
                 value={newDesc}
-                onChange={(e) => setNewDesc(e.target.value)}
+                onChange={(e) => {
+                  setNewDesc(e.target.value)
+                  setRemainingBalance(e.target.value)
+                }}
               ></textarea>
             </div>
           </div>
@@ -177,7 +187,7 @@ const Budget = () => {
                             bud.remainingAmount < 1
                               ? "text-red-600"
                               : "text-green-400"
-                          }  font-bold`}>&#x20B9;{bud.remainingAmount}</td>
+                          }  font-bold`}>&#x20B9;{bud.remainingAmount ?? remainingBalance}</td>
                       </tr>
                     ))}
                 </tbody>

@@ -13,45 +13,45 @@ const HomeLoading = () => {
       </thead>
       <tbody>
         <tr className="my-2">
-          <td>
-            <div className="bg-gray-500 min-h-8 w-full"></div>
+          <td className="border-r-2 border-gray-100 dark:border-gray-800">
+            <div className="bg-gray-300 dark:bg-gray-500 min-h-8 w-full"></div>
           </td>
-          <td>
-            <div className="bg-gray-500 min-h-8 w-full"></div>
+          <td className="border-r-2 border-gray-100 dark:border-gray-800">
+            <div className="bg-gray-300 dark:bg-gray-500 min-h-8 w-full"></div>
           </td>
-          <td className="text-red-400 font-bold">
-            <div className="bg-gray-500 min-h-8 w-full"></div>
+          <td className="border-r-2 border-gray-100 dark:border-gray-800">
+            <div className="bg-gray-300 dark:bg-gray-500 min-h-8 w-full"></div>
           </td>
-          <td className="text-red-400 font-bold">
-            <div className="bg-gray-500 min-h-8 w-full"></div>
-          </td>
-        </tr>
-        <tr className="my-2">
-          <td>
-            <div className="bg-gray-500 min-h-8 w-full"></div>
-          </td>
-          <td>
-            <div className="bg-gray-500 min-h-8 w-full"></div>
-          </td>
-          <td className="text-red-400 font-bold">
-            <div className="bg-gray-500 min-h-8 w-full"></div>
-          </td>
-          <td className="text-red-400 font-bold">
-            <div className="bg-gray-500 min-h-8 w-full"></div>
+          <td className="border-r-2 border-gray-100 dark:border-gray-800">
+            <div className="bg-gray-300 dark:bg-gray-500 min-h-8 w-full"></div>
           </td>
         </tr>
         <tr className="my-2">
-          <td>
-            <div className="bg-gray-500 min-h-8 w-full"></div>
+          <td className="border-r-2 border-gray-100 dark:border-gray-800">
+            <div className="bg-gray-300 dark:bg-gray-500 min-h-8 w-full"></div>
           </td>
-          <td>
-            <div className="bg-gray-500 min-h-8 w-full"></div>
+          <td className="border-r-2 border-gray-100 dark:border-gray-800">
+            <div className="bg-gray-300 dark:bg-gray-500 min-h-8 w-full"></div>
           </td>
-          <td className="text-red-400 font-bold">
-            <div className="bg-gray-500 min-h-8 w-full"></div>
+          <td className="border-r-2 border-gray-100 dark:border-gray-800">
+            <div className="bg-gray-300 dark:bg-gray-500 min-h-8 w-full"></div>
           </td>
-          <td className="text-red-400 font-bold">
-            <div className="bg-gray-500 min-h-8 w-full"></div>
+          <td className="border-r-2 border-gray-100 dark:border-gray-800">
+            <div className="bg-gray-300 dark:bg-gray-500 min-h-8 w-full"></div>
+          </td>
+        </tr>
+        <tr className="my-2">
+          <td className="border-r-2 border-gray-100 dark:border-gray-800">
+            <div className="bg-gray-300 dark:bg-gray-500 min-h-8 w-full"></div>
+          </td>
+          <td className="border-r-2 border-gray-100 dark:border-gray-800">
+            <div className="bg-gray-300 dark:bg-gray-500 min-h-8 w-full"></div>
+          </td>
+          <td className="border-r-2 border-gray-100 dark:border-gray-800">
+            <div className="bg-gray-300 dark:bg-gray-500 min-h-8 w-full"></div>
+          </td>
+          <td className="border-r-2 border-gray-100 dark:border-gray-800">
+            <div className="bg-gray-300 dark:bg-gray-500 min-h-8 w-full"></div>
           </td>
         </tr>
       </tbody>
