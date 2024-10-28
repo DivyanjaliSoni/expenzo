@@ -5,8 +5,8 @@ import Cookies from "js-cookie";
 import { toast, ToastContainer } from "react-toastify";
 
 const Expense = ({setAddExpense}) => {
-  const [allBudget, setAllBudget] = useState();
-  const [selectedCategory, setSelectedCatgeory] = useState();
+  const [allBudget, setAllBudget] = useState(null);
+  const [selectedCategory, setSelectedCatgeory] = useState(null);
   const [Category, setCategory] = useState("");
   const [amount, setAmount] = useState("");
   const [product, setProduct] = useState("");
