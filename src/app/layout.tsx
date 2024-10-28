@@ -42,7 +42,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={isDarkMode ? "dark" : ""}>
       <head>
-        <title>Expenzo</title>
+        <title>Expenso</title>
         <meta name="description" content="Track your expenses efficiently." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
@@ -51,7 +51,7 @@ export default function RootLayout({
         <header className="fixed top-0 w-full p-5 dark:bg-gray-700 dark:text-white bg-white border-b text-gray-800">
           <div className="flex justify-between items-center">
             <div className="text-2xl [text-shadow:1px_1px_2px_#565656]">
-              EXPENZO
+              EXPENso
             </div>
             <div className="flex gap-4 justify-center items-center">
               <div

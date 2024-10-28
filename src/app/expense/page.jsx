@@ -130,13 +130,6 @@ const Expense = () => {
         <div className="md:flex md:items-center">
           <div className="md:w-1/3"></div>
           <div className="md:w-2/3 flex justify-end">
-            {/* <button
-              onClick={() => setAddExpense(false)}
-              className="shadow bg-gray-600 hover:bg-gray-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-              type="button"
-            >
-              Back
-            </button> */}
             <button
               onClick={handleSubmit}
               className="shadow bg-gray-600 hover:bg-gray-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"

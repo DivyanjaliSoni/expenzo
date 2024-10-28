@@ -5,7 +5,8 @@ import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import Cookies from "js-cookie";
 import "react-toastify/dist/ReactToastify.css";
-import BudgetLoading from "../Components/budgetLoading/page"
+import BudgetLoading from "../Components/budgetLoading/page";
+import { CiEdit } from "react-icons/ci";
 
 const Budget = () => {
   const router = useRouter();
@@ -17,6 +18,10 @@ const Budget = () => {
   const [totalBudget, setTotalBudget] = useState();
   const [totalRemainingBudget, setTotalRemainingBudget] = useState();
   const [loading, setLoading] = useState(false);
+  const [editItem, setEditItem] = useState({user: Cookies.get("authUserId")});
+  const [inputAmount, setInputAmount] = useState("");
+  const [inputCategory, setInputCategory] = useState("");
+  const [inputLabel, setInputLabel] = useState("");
 
   useEffect(() => {
     const fetchBudget = async () => {
@@ -64,6 +69,14 @@ const Budget = () => {
     setTotalRemainingBudget(totalRemainingBudget);
   }, [budget]);
 
+  useEffect(() => {
+    if (editItem) {
+      setInputAmount(editItem.amount || "");
+      setInputCategory(editItem.category || "");
+      setInputLabel(editItem.label || "");
+    }
+  }, [editItem]);
+
   const handleSubmit = async () => {
     try {
       await axios
@@ -96,6 +109,17 @@ const Budget = () => {
     }
   };
 
+  const updateBudget = async() => {
+      try {
+        await axios.post("/api/budget/editAmount",editItem).then((res)=>{
+          console.log(res)
+        })
+      } catch (error) {
+        setLoading(false);
+        console.log("Error fetching data:", error);
+      }
+  }
+
   return (
     <>
       <section className=" min-h-[88.9vh] dark:bg-gray-900 py-10 px-5 ">
@@ -119,7 +143,7 @@ const Budget = () => {
                 id="inline-password"
                 type="text"
                 placeholder="100"
-                value={newAmount}
+                value={editItem ? editItem.amount: newAmount}
                 onChange={(e) => setNewAmount(e.target.value)}
               />
             </div>
@@ -139,7 +163,7 @@ const Budget = () => {
                 id="inline-password"
                 type="text"
                 placeholder="Grocery"
-                value={newCategory}
+                value={editItem ? editItem.category: newCategory}
                 onChange={(e) => setNewCategory(e.target.value)}
               />
             </div>
@@ -158,7 +182,7 @@ const Budget = () => {
                 className="bg-gray-200 text-gray-800 font-bold appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-600"
                 id="inline-full-name"
                 placeholder="e.g. Healthy diet"
-                value={newDesc}
+                value={editItem ? editItem.label: newDesc}
                 onChange={(e) => {
                   setNewDesc(e.target.value);
                   setRemainingBalance(e.target.value);
@@ -177,11 +201,11 @@ const Budget = () => {
                 Back
               </button>
               <button
-                onClick={handleSubmit}
+                onClick={editItem?updateBudget:handleSubmit}
                 className="shadow bg-gray-600 hover:bg-gray-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
                 type="button"
               >
-                Add
+                {editItem?'Save':'Add'}
               </button>
             </div>
           </div>
@@ -192,46 +216,65 @@ const Budget = () => {
           </div>
           <div>
             <div>
-              { loading ? <BudgetLoading/> : <table className="w-full">
-                <thead className="font-bold dark:bg-gray-400 bg-gray-500 text-white">
-                  <tr>
-                    <td>Category</td>
-                    <td>Budget</td>
-                    <td>Balance</td>
-                  </tr>
-                </thead>
-                <tbody className="dark:text-white text-gray-800">
-                  {budget &&
-                    budget.map((bud, index) => (
-                      <tr className="my-2" key={index}>
-                        <td>{bud.category}</td>
-                        <td
-                          className={` ${
-                            bud.amount < 1 ? "text-red-600" : "text-green-400"
-                          }  font-bold`}
-                        >
-                          &#x20B9;{bud.amount}
-                        </td>
-                        <td
-                          className={` ${
-                            bud.remainingAmount < 1
-                              ? "text-red-600"
-                              : "text-green-400"
-                          }  font-bold`}
-                        >
-                          &#x20B9;{bud.remainingAmount ?? remainingBalance}
-                        </td>
-                      </tr>
-                    ))}
-                  {budget && (
-                    <tr className="border-t border-t-gray-700 font-bold">
-                      <td>Total</td>
-                      <td>{totalBudget}</td>
-                      <td>{totalRemainingBudget}</td>
+              {loading ? (
+                <BudgetLoading />
+              ) : (
+                <table className="w-full">
+                  <thead className="font-bold dark:bg-gray-400 bg-gray-500 text-white">
+                    <tr>
+                      <td>Category</td>
+                      <td>Budget</td>
+                      <td>Balance</td>
+                      <td>Action</td>
                     </tr>
-                  )}
-                </tbody>
-              </table>}
+                  </thead>
+                  <tbody className="dark:text-white text-gray-800">
+                    {budget &&
+                      budget.map((bud, index) => (
+                        <tr className="my-2" key={index}>
+                          <td>{bud.category}</td>
+                          <td
+                            className={` ${
+                              bud.amount < 1 ? "text-red-600" : "text-green-400"
+                            }  font-bold`}
+                          >
+                            &#x20B9;{bud.amount}
+                          </td>
+                          <td
+                            className={` ${
+                              bud.remainingAmount < 1
+                                ? "text-red-600"
+                                : "text-green-400"
+                            }  font-bold`}
+                          >
+                            &#x20B9;{bud.remainingAmount ?? remainingBalance}
+                          </td>
+                          <td
+                            className={`cursor-pointer ${ editItem.amount === bud.amount && 'text-green-400'} `}
+                            onClick={() => {
+                              setEditItem({
+                                ...editItem,
+                                amount: bud.amount,
+                                label: bud.label,
+                                category: bud.category,
+                              });
+                            }}
+                          >
+                            <CiEdit className="text-3xl mx-auto" />
+                          </td>
+                        </tr>
+                      ))}
+                    {budget && (
+                      <tr className="border-t border-t-gray-700 font-bold">
+                        <td>Total</td>
+                        <td>{totalBudget}</td>
+                        <td>{totalRemainingBudget}</td>
+                        <td></td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
         </div>
