@@ -10,12 +10,14 @@ import HomeLoading from "./Components/homeLoading/page";
 import PieChart from "./Components/PieChart/page";
 import { LuTable } from "react-icons/lu";
 import { FaChartPie } from "react-icons/fa6";
+import Expense from "./expense/page";
 
 export default function Home() {
   const [income, setInome] = useState("");
   const [expenses, setExpenses] = useState();
   const [loading, setLoading] = useState(false);
   const [showChart, setShowChart] = useState(false);
+  const [addExpense, setAddExpense] = useState(false);
   useEffect(() => {
     const fetchIncome = async () => {
       await axios
@@ -51,7 +53,7 @@ export default function Home() {
       }
     };
     fetchBudget();
-  }, []);
+  }, [addExpense]);
 
   return (
     <section className="px-5 dark:bg-gray-900 min-h-[89vh] text-gray-800 dark:text-gray-100">
@@ -73,26 +75,32 @@ export default function Home() {
           </Link>
         </div>
         <div className="text-center">
-          <Link
-            href="/expense"
+          <button
+            onClick={()=>setAddExpense(true)}
             className="bg-gray-800 dark:bg-gray-700 text-white py-2 w-36 flex justify-center items-center gap-2 mx-auto"
           >
             <span>
               <FaPlus />
             </span>
             <span>Add Expense</span>
-          </Link>
+          </button>
         </div>
+        { addExpense && <Expense setAddExpense={setAddExpense}/> }
       </div>
       <div>
-        <div>
           <div className="flex justify-between items-center border-b border-gray-500 dark:border-gray-200 mb-5">
             <div className="">
               <h3 className="text-xl font-bold pb-2">Transaction History</h3>
             </div>
             <div className="text-2xl flex gap-3 items-center">
-              <LuTable onClick={()=>setShowChart(false)} className="cursor-pointer"/>
-              <FaChartPie onClick={()=>setShowChart(true)} className="cursor-pointer"/>
+              <LuTable
+                onClick={() => setShowChart(false)}
+                className="cursor-pointer"
+              />
+              <FaChartPie
+                onClick={() => setShowChart(true)}
+                className="cursor-pointer"
+              />
             </div>
           </div>
           {showChart ? (
@@ -100,8 +108,7 @@ export default function Home() {
               <PieChart />
             </div>
           ) : (
-            <div>
-              <div>
+              <div className="pb-5">
                 {!loading ? (
                   <table className="w-full">
                     <thead className="font-bold dark:bg-gray-400 bg-gray-500 text-white">
@@ -136,9 +143,7 @@ export default function Home() {
                   <HomeLoading />
                 )}
               </div>
-            </div>
           )}
-        </div>
       </div>
       <ToastContainer />
     </section>

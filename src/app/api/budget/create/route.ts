@@ -8,11 +8,12 @@ export async function POST(req: NextRequest) {
   const { user, category, label, amount } = await req.json();
 
   try {
-    const BudgetWithUser = await Budget.findOne({ category });
+    const BudgetWithUser = await Budget.findOne({ category,user });
     if (BudgetWithUser) {
-      await Budget.updateOne(
-        { category },
-        { $set: { amount } }
+      console.log(BudgetWithUser)
+      return NextResponse.json(
+        { message: "Budget already created"},
+        { status: 409 }
       );
     }
     const newBudget = new Budget({ user, category, label, amount } );

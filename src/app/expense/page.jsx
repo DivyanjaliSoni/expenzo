@@ -1,17 +1,15 @@
 "use client";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { toast, ToastContainer } from "react-toastify";
 
-const Expense = () => {
+const Expense = ({setAddExpense}) => {
   const [allBudget, setAllBudget] = useState();
   const [selectedCategory, setSelectedCatgeory] = useState();
   const [Category, setCategory] = useState("");
   const [amount, setAmount] = useState("");
   const [product, setProduct] = useState("");
-  const router = useRouter();
   const handleSubmit = async () => {
     try {
        await axios.post("/api/expense/create", {
@@ -23,7 +21,9 @@ const Expense = () => {
         setCategory('')
         setAmount('')
         setProduct('')
+        setAddExpense(false)
     } catch (error) {
+      setAddExpense(false)
       if (axios.isAxiosError(error)) {
         console.error("Axios error:", error.response?.data || error.message);
       } else {
@@ -54,11 +54,11 @@ const Expense = () => {
     );
   };
   return (
-    <section className="dark:bg-gray-900 px-2 min-h-[88vh] text-white">
-      <div className="px-5 py-10">
-        <h1 className="text-2xl font-bold pb-5  text-gray-800 dark:text-gray-100">
+    <section className="dark:bg-gray-900 px-2  text-white">
+      <div className="px-5 pt-10 pb-7">
+        {/* <h1 className="text-2xl font-bold pb-5  text-gray-800 dark:text-gray-100">
           Add Expenses
-        </h1>
+        </h1> */}
         <div className="md:flex md:items-center mb-6">
           <div className="md:w-1/3">
             <label
@@ -133,7 +133,7 @@ const Expense = () => {
           <div className="md:w-1/3"></div>
           <div className="md:w-2/3 flex justify-between">
             <button
-              onClick={() => router.push("/")}
+              onClick={() => setAddExpense(false)}
               className="shadow bg-gray-600 hover:bg-gray-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
               type="button"
             >

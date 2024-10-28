@@ -1,9 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import Cookies from "js-cookie";
+import "react-toastify/dist/ReactToastify.css";
+import BudgetLoading from "../Components/budgetLoading/page"
 
 const Budget = () => {
   const router = useRouter();
@@ -11,59 +13,84 @@ const Budget = () => {
   const [newAmount, setNewAmount] = useState("");
   const [newDesc, setNewDesc] = useState("");
   const [remainingBalance, setRemainingBalance] = useState();
-  const [budget,setBudget] = useState()
- 
+  const [budget, setBudget] = useState();
+  const [totalBudget, setTotalBudget] = useState();
+  const [totalRemainingBudget, setTotalRemainingBudget] = useState();
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     const fetchBudget = async () => {
+      setLoading(true);
       try {
         const response = await axios.post("/api/budget/getall", {
           id: Cookies.get("authUserId"),
         });
-  
+
         if (response && response.data) {
           const updatedBudgets = response.data.budgets.map((budget) => {
-            const totalExpenses = budget.expenses.reduce((sum, expense) => sum + expense.amount, 0);
+            const totalExpenses = budget.expenses.reduce(
+              (sum, expense) => sum + expense.amount,
+              0
+            );
             const remainingAmount = budget.amount - totalExpenses;
-  
+
             return {
               ...budget,
-              remainingAmount, 
+              remainingAmount,
             };
           });
-  
-          setBudget(updatedBudgets); 
+          setLoading(false);
+          setBudget(updatedBudgets);
         }
       } catch (error) {
+        setLoading(false);
         console.log("Error fetching data:", error);
       }
     };
-  
+
     fetchBudget();
   }, []);
-  
- 
+
+  useEffect(() => {
+    const totalBudget = budget?.reduce(
+      (acc, item) => acc + Number(item.amount),
+      0
+    );
+    const totalRemainingBudget = budget?.reduce(
+      (acc, item) => acc + Number(item.remainingAmount),
+      0
+    );
+    setTotalBudget(totalBudget);
+    setTotalRemainingBudget(totalRemainingBudget);
+  }, [budget]);
 
   const handleSubmit = async () => {
     try {
-      await axios.post("/api/budget/create", {
-        user: Cookies.get("authUserId"),
-        category: newCategory,
-        label: newDesc,
-        amount: newAmount,
-      }).then((res)=>{
-        setBudget((prevItems) => [
-          ...prevItems,
-          {
-            ...res.data.budget,
-            remainingAmount: newAmount,
-          },
-        ]);
-        setNewAmount("");
-        setNewCategory("");
-        setNewDesc("");
-      }).catch((err)=>{
-        console.log(err)
-      })
+      await axios
+        .post("/api/budget/create", {
+          user: Cookies.get("authUserId"),
+          category: newCategory,
+          label: newDesc,
+          amount: newAmount,
+        })
+        .then((res) => {
+          setBudget((prevItems) => [
+            ...prevItems,
+            {
+              ...res.data.budget,
+              remainingAmount: newAmount,
+            },
+          ]);
+          setNewAmount("");
+          setNewCategory("");
+          setNewDesc("");
+        })
+        .catch((err) => {
+          if (err.status === 409) {
+            toast.error("Budget already created");
+          }
+          console.log(err);
+        });
     } catch (error) {
       toast.error(error);
     }
@@ -133,8 +160,8 @@ const Budget = () => {
                 placeholder="e.g. Healthy diet"
                 value={newDesc}
                 onChange={(e) => {
-                  setNewDesc(e.target.value)
-                  setRemainingBalance(e.target.value)
+                  setNewDesc(e.target.value);
+                  setRemainingBalance(e.target.value);
                 }}
               ></textarea>
             </div>
@@ -165,7 +192,7 @@ const Budget = () => {
           </div>
           <div>
             <div>
-              <table className="w-full">
+              { loading ? <BudgetLoading/> : <table className="w-full">
                 <thead className="font-bold dark:bg-gray-400 bg-gray-500 text-white">
                   <tr>
                     <td>Category</td>
@@ -178,26 +205,38 @@ const Budget = () => {
                     budget.map((bud, index) => (
                       <tr className="my-2" key={index}>
                         <td>{bud.category}</td>
-                        <td className={` ${
-                            bud.amount < 1
-                              ? "text-red-600"
-                              : "text-green-400"
-                          }  font-bold`}>
+                        <td
+                          className={` ${
+                            bud.amount < 1 ? "text-red-600" : "text-green-400"
+                          }  font-bold`}
+                        >
                           &#x20B9;{bud.amount}
                         </td>
-                        <td className={` ${
+                        <td
+                          className={` ${
                             bud.remainingAmount < 1
                               ? "text-red-600"
                               : "text-green-400"
-                          }  font-bold`}>&#x20B9;{bud.remainingAmount ?? remainingBalance}</td>
+                          }  font-bold`}
+                        >
+                          &#x20B9;{bud.remainingAmount ?? remainingBalance}
+                        </td>
                       </tr>
                     ))}
+                  {budget && (
+                    <tr className="border-t border-t-gray-700 font-bold">
+                      <td>Total</td>
+                      <td>{totalBudget}</td>
+                      <td>{totalRemainingBudget}</td>
+                    </tr>
+                  )}
                 </tbody>
-              </table>
+              </table>}
             </div>
           </div>
         </div>
       </section>
+      <ToastContainer />
     </>
   );
 };
