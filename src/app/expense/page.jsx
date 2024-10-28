@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { toast, ToastContainer } from "react-toastify";
 
-const Expense = ({setAddExpense}) => {
+const Expense = () => {
   const [allBudget, setAllBudget] = useState(null);
   const [selectedCategory, setSelectedCatgeory] = useState(null);
   const [Category, setCategory] = useState("");
@@ -21,9 +21,7 @@ const Expense = ({setAddExpense}) => {
         setCategory('')
         setAmount('')
         setProduct('')
-        setAddExpense(false)
     } catch (error) {
-      setAddExpense(false)
       if (axios.isAxiosError(error)) {
         console.error("Axios error:", error.response?.data || error.message);
       } else {
@@ -131,14 +129,14 @@ const Expense = ({setAddExpense}) => {
         </div>
         <div className="md:flex md:items-center">
           <div className="md:w-1/3"></div>
-          <div className="md:w-2/3 flex justify-between">
-            <button
+          <div className="md:w-2/3 flex justify-end">
+            {/* <button
               onClick={() => setAddExpense(false)}
               className="shadow bg-gray-600 hover:bg-gray-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
               type="button"
             >
               Back
-            </button>
+            </button> */}
             <button
               onClick={handleSubmit}
               className="shadow bg-gray-600 hover:bg-gray-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
@@ -153,5 +151,6 @@ const Expense = ({setAddExpense}) => {
     </section>
   );
 };
+
 
 export default Expense;

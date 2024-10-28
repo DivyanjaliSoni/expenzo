@@ -1,5 +1,5 @@
 "use client";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaMinus } from "react-icons/fa";
 import Link from "next/link";
 import { ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
@@ -76,74 +76,80 @@ export default function Home() {
         </div>
         <div className="text-center">
           <button
-            onClick={()=>setAddExpense(true)}
+            onClick={() => setAddExpense(!addExpense)}
             className="bg-gray-800 dark:bg-gray-700 text-white py-2 w-36 flex justify-center items-center gap-2 mx-auto"
           >
-            <span>
-              <FaPlus />
-            </span>
+            {addExpense ? (
+              <span>
+                <FaMinus />
+              </span>
+            ) : (
+              <span>
+                <FaPlus />
+              </span>
+            )}
             <span>Add Expense</span>
           </button>
         </div>
-        { addExpense && <Expense setAddExpense={setAddExpense}/> }
+        {addExpense && <Expense setAddExpense={setAddExpense} />}
       </div>
       <div>
-          <div className="flex justify-between items-center border-b border-gray-500 dark:border-gray-200 mb-5">
-            <div className="">
-              <h3 className="text-xl font-bold pb-2">Transaction History</h3>
-            </div>
-            <div className="text-2xl flex gap-3 items-center">
-              <LuTable
-                onClick={() => setShowChart(false)}
-                className="cursor-pointer"
-              />
-              <FaChartPie
-                onClick={() => setShowChart(true)}
-                className="cursor-pointer"
-              />
-            </div>
+        <div className="flex justify-between items-center border-b border-gray-500 dark:border-gray-200 mb-5">
+          <div className="">
+            <h3 className="text-xl font-bold pb-2">Transaction History</h3>
           </div>
-          {showChart ? (
-            <div>
-              <PieChart />
-            </div>
-          ) : (
-              <div className="pb-5">
-                {!loading ? (
-                  <table className="w-full">
-                    <thead className="font-bold dark:bg-gray-400 bg-gray-500 text-white">
-                      <tr>
-                        <td>Product</td>
-                        <td>Category</td>
-                        <td>Amount</td>
-                        <td>Date</td>
+          <div className="text-2xl flex gap-3 items-center">
+            <LuTable
+              onClick={() => setShowChart(false)}
+              className="cursor-pointer"
+            />
+            <FaChartPie
+              onClick={() => setShowChart(true)}
+              className="cursor-pointer"
+            />
+          </div>
+        </div>
+        {showChart ? (
+          <div>
+            <PieChart />
+          </div>
+        ) : (
+          <div className="pb-5">
+            {!loading ? (
+              <table className="w-full">
+                <thead className="font-bold dark:bg-gray-400 bg-gray-500 text-white">
+                  <tr>
+                    <td>Product</td>
+                    <td>Category</td>
+                    <td>Amount</td>
+                    <td>Date</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  {expenses &&
+                    expenses.map((exp, index) => (
+                      <tr className="my-2" key={index}>
+                        <td>{exp.product}</td>
+                        <td>{exp.category}</td>
+                        <td className="text-red-400 font-bold">
+                          - &#x20B9;{exp.amount}
+                        </td>
+                        <td>
+                          {new Date().toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                          })}
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {expenses &&
-                        expenses.map((exp, index) => (
-                          <tr className="my-2" key={index}>
-                            <td>{exp.product}</td>
-                            <td>{exp.category}</td>
-                            <td className="text-red-400 font-bold">
-                              - &#x20B9;{exp.amount}
-                            </td>
-                            <td>
-                              {new Date().toLocaleDateString("en-US", {
-                                year: "numeric",
-                                month: "2-digit",
-                                day: "2-digit",
-                              })}
-                            </td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                ) : (
-                  <HomeLoading />
-                )}
-              </div>
-          )}
+                    ))}
+                </tbody>
+              </table>
+            ) : (
+              <HomeLoading />
+            )}
+          </div>
+        )}
       </div>
       <ToastContainer />
     </section>
