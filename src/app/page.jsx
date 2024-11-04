@@ -10,7 +10,7 @@ import HomeLoading from "./Components/homeLoading/page";
 import PieChart from "./Components/PieChart/page";
 import { LuTable } from "react-icons/lu";
 import { FaChartPie } from "react-icons/fa6";
-import Expense from "./expense/page";
+import Expense from "./expense/expense";
 
 export default function Home() {
   const [income, setInome] = useState("");
