@@ -6,12 +6,15 @@ import { FaLightbulb } from "react-icons/fa6";
 import { AiOutlineLogout } from "react-icons/ai";
 import Cookies from "js-cookie";
 import { usePathname, useRouter } from "next/navigation";
+import useDarkMode from '../usedarkmode/page';
 
 const Header = () => {
   const pathname = usePathname();
   const router = useRouter();
+  const isDefaultDarkMode = useDarkMode();
+  console.log(isDefaultDarkMode)
 
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState( isDefaultDarkMode ? true: false );
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const checkAuth = () => {
@@ -32,7 +35,13 @@ const Header = () => {
 
   const setTheme = () => {
     const htmlElement = document.documentElement
+    if(isDefaultDarkMode){
+      htmlElement.classList.add("dark")
+    }
+    else{
     htmlElement.classList.toggle("dark");
+    }
+    
   };
   
 
