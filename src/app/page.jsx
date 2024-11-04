@@ -54,7 +54,7 @@ export default function Home() {
       }
     };
     fetchBudget();
-  }, [addExpense,createRes]);
+  }, [createRes]);
 
   return (
     <section className="px-5 dark:bg-gray-900 min-h-[89vh] text-gray-800 dark:text-gray-100">
