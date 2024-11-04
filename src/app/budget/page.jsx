@@ -19,10 +19,6 @@ const Budget = () => {
   const [totalRemainingBudget, setTotalRemainingBudget] = useState();
   const [loading, setLoading] = useState(false);
   const [editItem, setEditItem] = useState({user: Cookies.get("authUserId")});
-  const [inputAmount, setInputAmount] = useState("");
-  const [inputCategory, setInputCategory] = useState("");
-  const [inputLabel, setInputLabel] = useState("");
-
   useEffect(() => {
     const fetchBudget = async () => {
       setLoading(true);
