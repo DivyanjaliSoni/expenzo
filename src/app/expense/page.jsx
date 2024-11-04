@@ -2,7 +2,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { toast, ToastContainer } from "react-toastify";
 
 const Expense = ({setCreateRes}) => {
   const [allBudget, setAllBudget] = useState(null);
@@ -139,7 +138,6 @@ const Expense = ({setCreateRes}) => {
           </div>
         </div>
       </div>
-      <ToastContainer theme="dark"/>
     </section>
   );
 };
