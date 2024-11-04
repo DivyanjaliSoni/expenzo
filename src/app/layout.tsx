@@ -10,13 +10,6 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   title: "Expenso",
   description: "Track your expenses efficiently.",
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-  },
-  icons: {
-    icon: "/favicon.ico",
-  },
 };
 export const viewport: Viewport = {
   themeColor: "#FFFFFF",
