@@ -3,7 +3,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
-const Expense = ({setCreateRes}) => {
+const Expense = ({ setCreateRes }) => {
   const [allBudget, setAllBudget] = useState(null);
   const [selectedCategory, setSelectedCatgeory] = useState(null);
   const [Category, setCategory] = useState("");
@@ -21,7 +21,6 @@ const Expense = ({setCreateRes}) => {
         setCategory('')
         setAmount('')
         setProduct('')
-        setAddedExpense(true)
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error("Axios error:", error.response?.data || error.message);
