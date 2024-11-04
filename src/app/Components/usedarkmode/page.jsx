@@ -1,30 +1,26 @@
-"use client"
-import { useEffect, useState } from 'react';
+"use client";
+import { useEffect, useRef } from "react";
 
 const useDarkMode = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+  const isDarkModeRef = useRef(mediaQuery.matches); // Use ref to hold the current value
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-
-    // Update state based on the media query
     const updateDarkMode = (e) => {
-      setIsDarkMode(e.matches);
+      isDarkModeRef.current = e.matches; // Update the ref value
     };
 
-    // Set the initial value
-    setIsDarkMode(mediaQuery.matches);
+    // Set initial value based on media query
+    isDarkModeRef.current = mediaQuery.matches;
 
-    // Add event listener
-    mediaQuery.addEventListener('change', updateDarkMode);
+    mediaQuery.addEventListener("change", updateDarkMode);
 
-    // Cleanup the event listener on component unmount
     return () => {
-      mediaQuery.removeEventListener('change', updateDarkMode);
+      mediaQuery.removeEventListener("change", updateDarkMode);
     };
   }, []);
 
-  return isDarkMode;
+  return isDarkModeRef.current; // Return the current value directly
 };
 
 export default useDarkMode;

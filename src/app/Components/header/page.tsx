@@ -12,9 +12,16 @@ const Header = () => {
   const pathname = usePathname();
   const router = useRouter();
   const isDefaultDarkMode = useDarkMode();
-  console.log(isDefaultDarkMode)
 
-  const [isDarkMode, setIsDarkMode] = useState( isDefaultDarkMode ? true: false );
+  useEffect(()=>{
+    console.log("outside if",isDefaultDarkMode)
+    if(isDefaultDarkMode){    
+      console.log("inside if",isDefaultDarkMode)
+      document.documentElement.classList.add("dark")
+    }
+  },[])
+
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const checkAuth = () => {
@@ -35,12 +42,13 @@ const Header = () => {
 
   const setTheme = () => {
     const htmlElement = document.documentElement
-    if(isDefaultDarkMode){
-      htmlElement.classList.add("dark")
-    }
-    else{
+    console.log("inside setTheme",isDefaultDarkMode)
+    // if(isDefaultDarkMode){
+    //   htmlElement.classList.add("dark")
+    // }
+    // else{
     htmlElement.classList.toggle("dark");
-    }
+    // }
     
   };
   
