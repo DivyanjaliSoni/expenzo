@@ -18,6 +18,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [showChart, setShowChart] = useState(false);
   const [addExpense, setAddExpense] = useState(false);
+  const [createRes, setCreateRes] = useState();
   useEffect(() => {
     const fetchIncome = async () => {
       await axios
@@ -53,7 +54,7 @@ export default function Home() {
       }
     };
     fetchBudget();
-  }, [addExpense]);
+  }, [addExpense,createRes]);
 
   return (
     <section className="px-5 dark:bg-gray-900 min-h-[89vh] text-gray-800 dark:text-gray-100">
@@ -91,7 +92,7 @@ export default function Home() {
             <span>Add Expense</span>
           </button>
         </div>
-        {addExpense && <Expense setAddExpense={setAddExpense} />}
+        {addExpense && <Expense setAddExpense={setAddExpense}  setCreateRes={setCreateRes} />}
       </div>
       <div>
         <div className="flex justify-between items-center border-b border-gray-500 dark:border-gray-200 mb-5">

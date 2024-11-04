@@ -18,7 +18,6 @@ const Budget = () => {
   const [totalBudget, setTotalBudget] = useState();
   const [totalRemainingBudget, setTotalRemainingBudget] = useState();
   const [loading, setLoading] = useState(false);
-  const [editItem, setEditItem] = useState({user: Cookies.get("authUserId")});
   useEffect(() => {
     const fetchBudget = async () => {
       setLoading(true);
@@ -65,14 +64,6 @@ const Budget = () => {
     setTotalRemainingBudget(totalRemainingBudget);
   }, [budget]);
 
-  useEffect(() => {
-    if (editItem) {
-      setInputAmount(editItem.amount || "");
-      setInputCategory(editItem.category || "");
-      setInputLabel(editItem.label || "");
-    }
-  }, [editItem]);
-
   const handleSubmit = async () => {
     try {
       await axios
@@ -105,17 +96,6 @@ const Budget = () => {
     }
   };
 
-  const updateBudget = async() => {
-      try {
-        await axios.post("/api/budget/editAmount",editItem).then((res)=>{
-          console.log(res)
-        })
-      } catch (error) {
-        setLoading(false);
-        console.log("Error fetching data:", error);
-      }
-  }
-
   return (
     <>
       <section className=" min-h-[88.9vh] dark:bg-gray-900 py-10 px-5 ">
@@ -139,7 +119,7 @@ const Budget = () => {
                 id="inline-password"
                 type="text"
                 placeholder="100"
-                value={editItem ? editItem.amount: newAmount}
+                value={newAmount}
                 onChange={(e) => setNewAmount(e.target.value)}
               />
             </div>
@@ -159,7 +139,7 @@ const Budget = () => {
                 id="inline-password"
                 type="text"
                 placeholder="Grocery"
-                value={editItem ? editItem.category: newCategory}
+                value={newCategory}
                 onChange={(e) => setNewCategory(e.target.value)}
               />
             </div>
@@ -178,7 +158,7 @@ const Budget = () => {
                 className="bg-gray-200 text-gray-800 font-bold appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-600"
                 id="inline-full-name"
                 placeholder="e.g. Healthy diet"
-                value={editItem ? editItem.label: newDesc}
+                value={newDesc}
                 onChange={(e) => {
                   setNewDesc(e.target.value);
                   setRemainingBalance(e.target.value);
@@ -197,11 +177,11 @@ const Budget = () => {
                 Back
               </button>
               <button
-                onClick={editItem?updateBudget:handleSubmit}
+                onClick={handleSubmit}
                 className="shadow bg-gray-600 hover:bg-gray-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
                 type="button"
               >
-                {editItem?'Save':'Add'}
+                Add
               </button>
             </div>
           </div>
@@ -245,17 +225,7 @@ const Budget = () => {
                           >
                             &#x20B9;{bud.remainingAmount ?? remainingBalance}
                           </td>
-                          <td
-                            className={`cursor-pointer ${ editItem.amount === bud.amount && 'text-green-400'} `}
-                            onClick={() => {
-                              setEditItem({
-                                ...editItem,
-                                amount: bud.amount,
-                                label: bud.label,
-                                category: bud.category,
-                              });
-                            }}
-                          >
+                          <td>
                             <CiEdit className="text-3xl mx-auto" />
                           </td>
                         </tr>

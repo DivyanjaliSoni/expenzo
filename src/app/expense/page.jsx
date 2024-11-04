@@ -4,23 +4,25 @@ import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { toast, ToastContainer } from "react-toastify";
 
-const Expense = () => {
+const Expense = ({setCreateRes}) => {
   const [allBudget, setAllBudget] = useState(null);
   const [selectedCategory, setSelectedCatgeory] = useState(null);
   const [Category, setCategory] = useState("");
   const [amount, setAmount] = useState("");
   const [product, setProduct] = useState("");
+ 
   const handleSubmit = async () => {
     try {
-       await axios.post("/api/expense/create", {
+       const response = await axios.post("/api/expense/create", {
         budget: selectedCategory._id,
         product,
         amount: Number(amount),
       })
-      toast.success("Expense added")
+      setCreateRes(response)
         setCategory('')
         setAmount('')
         setProduct('')
+        setAddedExpense(true)
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error("Axios error:", error.response?.data || error.message);
@@ -54,9 +56,6 @@ const Expense = () => {
   return (
     <section className="dark:bg-gray-900 px-2  text-white">
       <div className="px-5 pt-10 pb-7">
-        {/* <h1 className="text-2xl font-bold pb-5  text-gray-800 dark:text-gray-100">
-          Add Expenses
-        </h1> */}
         <div className="md:flex md:items-center mb-6">
           <div className="md:w-1/3">
             <label
