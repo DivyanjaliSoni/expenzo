@@ -1,10 +1,10 @@
 "use client";
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
-export default function EditBudgetPage() {
+const EditBudgetPage = () => {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const [editBudgetId, setEditBudgetId] = useState();
@@ -15,9 +15,6 @@ export default function EditBudgetPage() {
   const router = useRouter();
 
   const editBudget = async() => {
-    console.log(editAmount)
-    console.log(editCategory)
-    console.log(editLabel)
     try {
       await axios
         .patch("/api/budget/edit", {
@@ -154,3 +151,13 @@ export default function EditBudgetPage() {
     </section>
   );
 }
+
+const PageWrapper = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <EditBudgetPage />
+    </Suspense>
+  );
+};
+
+export default PageWrapper;
