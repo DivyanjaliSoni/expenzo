@@ -8,12 +8,12 @@ export async function PATCH(req: NextRequest) {
   const { id, amount, category, label, user } = await req.json();
 
   try {
-    const BudgetWithUser = await Budget.findOne({ _id: id });
+    const BudgetWithUser = await Budget.findOne({ _id: id,user });
     if (BudgetWithUser) {
-      const updateFields: { amount: any; label: string; category: string } = {
+      const updateFields: { amount: string; label: string; category: string } = {
         amount,label,category
       };
-      await Budget.updateOne({ _id: id }, { $set: updateFields });
+      await Budget.updateOne({ _id: id,user }, { $set: updateFields });
       return NextResponse.json({ message: "Budget updated" }, { status: 200 });
     } else {
       return NextResponse.json(

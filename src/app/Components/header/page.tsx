@@ -17,7 +17,7 @@ const Header = () => {
     if(isDefaultDarkMode){    
       document.documentElement.classList.add("dark")
     }
-  },[])
+  },[isDefaultDarkMode])
 
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
