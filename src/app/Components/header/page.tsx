@@ -14,9 +14,7 @@ const Header = () => {
   const isDefaultDarkMode = useDarkMode();
 
   useEffect(()=>{
-    console.log("outside if",isDefaultDarkMode)
     if(isDefaultDarkMode){    
-      console.log("inside if",isDefaultDarkMode)
       document.documentElement.classList.add("dark")
     }
   },[])

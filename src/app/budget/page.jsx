@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 import "react-toastify/dist/ReactToastify.css";
 import BudgetLoading from "../Components/budgetLoading/page";
 import { CiEdit } from "react-icons/ci";
+import Link from "next/link";
 
 const Budget = () => {
   const router = useRouter();
@@ -226,7 +227,15 @@ const Budget = () => {
                             &#x20B9;{bud.remainingAmount ?? remainingBalance}
                           </td>
                           <td>
-                            <CiEdit className="text-3xl mx-auto" />
+                            <Link
+                              href={{
+                                pathname: '/budget/edit',
+                                query: { id: bud._id },
+                              }}
+                              state={bud}
+                            >
+                              <CiEdit className="text-3xl mx-auto" />
+                            </Link>
                           </td>
                         </tr>
                       ))}

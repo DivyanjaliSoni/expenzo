@@ -6,7 +6,7 @@ export async function POST(req:NextRequest) {
   try {
     const { id } = await req.json()
     await connect();
-    const budget = await Budget.find({_id:id});
+    const budget = await Budget.findOne({_id:id});
 
     return NextResponse.json(
       { message: "category fetched", budget },
