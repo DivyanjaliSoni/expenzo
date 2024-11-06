@@ -9,18 +9,18 @@ const Expense = ({ setCreateRes }) => {
   const [Category, setCategory] = useState("");
   const [amount, setAmount] = useState("");
   const [product, setProduct] = useState("");
- 
+
   const handleSubmit = async () => {
     try {
-       const response = await axios.post("/api/expense/create", {
+      const response = await axios.post("/api/expense/create", {
         budget: selectedCategory._id,
         product,
         amount: Number(amount),
-      })
-      setCreateRes(response)
-        setCategory('')
-        setAmount('')
-        setProduct('')
+      });
+      setCreateRes(response);
+      setCategory("");
+      setAmount("");
+      setProduct("");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error("Axios error:", error.response?.data || error.message);
@@ -52,10 +52,11 @@ const Expense = ({ setCreateRes }) => {
     );
   };
   return (
-    <section className="dark:bg-gray-900 px-2  text-white">
-      <div className="px-5 pt-10 pb-7">
-        <div className="md:flex md:items-center mb-6">
-          <div className="md:w-1/3">
+    <section className="dark:bg-gray-900 px-2 text-white md:flex justify-center">
+      
+      <div className="px-5 pt-10 pb-7 grid grid-cols-2 gap-x-2">
+        <div className="md:flex md:items-center mb-6 col-span-2 md:col-span-1">
+          <div className="max-w-36 flex-shrink-0">
             <label
               className="block dark:text-gray-200 text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
               htmlFor="inline-password"
@@ -63,7 +64,7 @@ const Expense = ({ setCreateRes }) => {
               Amount <span>*</span>
             </label>
           </div>
-          <div className="md:w-2/3">
+          <div className="">
             <input
               className="bg-gray-200 text-gray-800 font-bold appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-600"
               id="inline-password"
@@ -74,8 +75,8 @@ const Expense = ({ setCreateRes }) => {
             />
           </div>
         </div>
-        <div className="md:flex md:items-center mb-6">
-          <div className="md:w-1/3">
+        <div className="md:flex md:items-center mb-6 col-span-2 md:col-span-1">
+          <div className="max-w-36 flex-shrink-0">
             <label
               className="block dark:text-gray-200 text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
               htmlFor="product"
@@ -83,7 +84,7 @@ const Expense = ({ setCreateRes }) => {
               Product<span>*</span>
             </label>
           </div>
-          <div className="md:w-2/3">
+          <div className="">
             <input
               className="bg-gray-200 text-gray-800 font-bold appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-600"
               id="product"
@@ -94,8 +95,8 @@ const Expense = ({ setCreateRes }) => {
             />
           </div>
         </div>
-        <div className="md:flex md:items-center mb-6">
-          <div className="md:w-1/3">
+        <div className="md:flex md:items-center mb-6 col-span-2">
+          <div className="max-w-36 flex-shrink-0">
             <label
               className="block dark:text-gray-200 text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
               htmlFor="inline-password"
@@ -103,7 +104,7 @@ const Expense = ({ setCreateRes }) => {
               Select Category<span>*</span>
             </label>
           </div>
-          <div className="md:w-2/3">
+          <div className="w-full">
             <select
               value={Category || ""} // Ensure the initial value is controlled
               onChange={(e) => {
@@ -124,22 +125,18 @@ const Expense = ({ setCreateRes }) => {
             </select>
           </div>
         </div>
-        <div className="md:flex md:items-center">
-          <div className="md:w-1/3"></div>
-          <div className="md:w-2/3 flex justify-end">
-            <button
-              onClick={handleSubmit}
-              className="shadow bg-gray-600 hover:bg-gray-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-              type="button"
-            >
-              Add
-            </button>
-          </div>
+        <div className="flex items-center justify-end col-span-2">
+          <button
+            onClick={handleSubmit}
+            className="shadow bg-gray-600 hover:bg-gray-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+            type="button"
+          >
+            Add
+          </button>
         </div>
       </div>
     </section>
   );
 };
-
 
 export default Expense;

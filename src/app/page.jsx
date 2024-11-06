@@ -92,14 +92,16 @@ export default function Home() {
             <span>Add Expense</span>
           </button>
         </div>
-        {addExpense && <Expense setAddExpense={setAddExpense}  setCreateRes={setCreateRes} />}
+        {addExpense && (
+          <Expense setAddExpense={setAddExpense} setCreateRes={setCreateRes} />
+        )}
       </div>
       <div>
         <div className="flex justify-between items-center border-b border-gray-500 dark:border-gray-200 mb-5">
           <div className="">
             <h3 className="text-xl font-bold pb-2">Transaction History</h3>
           </div>
-          <div className="text-2xl flex gap-3 items-center">
+          <div className="text-2xl gap-3 items-center flex md:hidden">
             <LuTable
               onClick={() => setShowChart(false)}
               className="cursor-pointer"
@@ -111,41 +113,46 @@ export default function Home() {
           </div>
         </div>
         {showChart ? (
-          <div>
+          <div className="block md:hidden">
             <PieChart />
           </div>
         ) : (
-          <div className="pb-5">
+          <div className="pb-5 grid grid-cols-2 items-start">
             {!loading ? (
-              <table className="w-full">
-                <thead className="font-bold dark:bg-gray-400 bg-gray-500 text-white">
-                  <tr>
-                    <td>Product</td>
-                    <td>Category</td>
-                    <td>Amount</td>
-                    <td>Date</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  {expenses &&
-                    expenses.map((exp, index) => (
-                      <tr className="my-2" key={index}>
-                        <td>{exp.product}</td>
-                        <td>{exp.category}</td>
-                        <td className="text-red-400 font-bold">
-                          - &#x20B9;{exp.amount}
-                        </td>
-                        <td>
-                          {new Date().toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "2-digit",
-                            day: "2-digit",
-                          })}
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
+              <>
+                <table className="md:col-span-1 col-span-2">
+                  <thead className="font-bold dark:bg-gray-400 bg-gray-500 text-white">
+                    <tr>
+                      <td>Product</td>
+                      <td>Category</td>
+                      <td>Amount</td>
+                      <td>Date</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {expenses &&
+                      expenses.map((exp, index) => (
+                        <tr className="my-2" key={index}>
+                          <td>{exp.product}</td>
+                          <td>{exp.category}</td>
+                          <td className="text-red-400 font-bold">
+                            - &#x20B9;{exp.amount}
+                          </td>
+                          <td>
+                            {new Date().toLocaleDateString("en-US", {
+                              year: "numeric",
+                              month: "2-digit",
+                              day: "2-digit",
+                            })}
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+                <div className="hidden md:flex justify-center items-center">
+                  <PieChart />
+                </div>
+              </>
             ) : (
               <HomeLoading />
             )}

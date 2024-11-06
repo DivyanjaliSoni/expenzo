@@ -2,7 +2,7 @@ import React from "react";
 
 const HomeLoading = () => {
   return (
-    <table className="w-full">
+    <table className="md:col-span-1 col-span-2">
       <thead className="font-bold dark:bg-gray-400 bg-gray-500 text-white">
         <tr>
           <td>Product</td>

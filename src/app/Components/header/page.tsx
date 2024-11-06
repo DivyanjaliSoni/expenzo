@@ -40,14 +40,7 @@ const Header = () => {
 
   const setTheme = () => {
     const htmlElement = document.documentElement
-    console.log("inside setTheme",isDefaultDarkMode)
-    // if(isDefaultDarkMode){
-    //   htmlElement.classList.add("dark")
-    // }
-    // else{
     htmlElement.classList.toggle("dark");
-    // }
-    
   };
   
 
@@ -55,7 +48,7 @@ const Header = () => {
     <header className="fixed top-0 w-full p-5 dark:bg-gray-700 dark:text-white bg-white border-b text-gray-800">
       <div className="flex justify-between items-center">
         <div className="text-2xl [text-shadow:1px_1px_2px_#565656]">
-          EXPENso
+          EXPENSO
         </div>
         <div className="flex gap-4 justify-center items-center">
           <div
