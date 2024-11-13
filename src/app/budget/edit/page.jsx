@@ -23,28 +23,6 @@ const EditBudgetPage = () => {
 
   const router = useRouter();
 
-  const editBudget = async () => {
-    try {
-      await axios
-        .patch("/api/budget/edit", {
-          id: editBudgetId,
-          amount,
-          category,
-          label,
-          user: Cookies.get("authUserId"),
-        })
-        .then((res) => {
-          console.log(res);
-          router.back();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     const getEditedItem = async () => {
       try {

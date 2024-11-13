@@ -6,7 +6,6 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import "react-toastify/dist/ReactToastify.css";
 import BudgetLoading from "../Components/budgetLoading/page";
-import { CiEdit } from "react-icons/ci";
 import Link from "next/link";
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -130,7 +129,7 @@ const Budget = () => {
             console.log(err);
           });
       } catch (error) {
-        console.log(err);
+        console.log(error);
       }
     toast.success("Budget deleted");
   };

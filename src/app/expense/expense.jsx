@@ -25,7 +25,7 @@ const Expense = ({ setCreateRes }) => {
     },
     validationSchema: expenseSchema,
 
-    onSubmit: async ({ amount, product, category },{resetForm}) => {
+    onSubmit: async ({ amount, product },{resetForm}) => {
       try {
         const response = await axios.post("/api/expense/create", {
           budget: selectedCategory._id,
@@ -66,8 +66,8 @@ const Expense = ({ setCreateRes }) => {
     );
   };
   const handleCategoryChange = (e) => {
-    formik.handleChange(e); // Update Formik's state
-    getCategoryInfo(e.target.value); // Call your custom function
+    formik.handleChange(e);
+    getCategoryInfo(e.target.value);
   };
   const { values, errors, touched, handleChange, handleSubmit } = formik;
   return (
