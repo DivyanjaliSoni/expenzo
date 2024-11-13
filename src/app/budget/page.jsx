@@ -8,47 +8,98 @@ import "react-toastify/dist/ReactToastify.css";
 import BudgetLoading from "../Components/budgetLoading/page";
 import { CiEdit } from "react-icons/ci";
 import Link from "next/link";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import { MdDeleteOutline } from "react-icons/md";
+import { AiTwotoneEdit } from "react-icons/ai";
+
+const budgetSchema = Yup.object().shape({
+  amount: Yup.number().typeError("Amount must be a number").required(),
+  category: Yup.string().required(),
+  label: Yup.string(),
+});
 
 const Budget = () => {
   const router = useRouter();
-  const [newCategory, setNewCategory] = useState("");
-  const [newAmount, setNewAmount] = useState("");
-  const [newDesc, setNewDesc] = useState("");
-  const [remainingBalance, setRemainingBalance] = useState();
   const [budget, setBudget] = useState();
   const [totalBudget, setTotalBudget] = useState();
   const [totalRemainingBudget, setTotalRemainingBudget] = useState();
+  const [deleteBudgetId, setdeleteBudgetId] = useState();
   const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    const fetchBudget = async () => {
-      setLoading(true);
+  const [showDelConfirmationPopUp, setShowDelConfirmationPopUp] =
+    useState(false);
+
+  const formik = useFormik({
+    initialValues: {
+      amount: "",
+      category: "",
+      label: "",
+    },
+
+    validationSchema: budgetSchema,
+
+    onSubmit: async ({ amount, category, label }, { resetForm }) => {
       try {
-        const response = await axios.post("/api/budget/getall", {
-          id: Cookies.get("authUserId"),
-        });
-
-        if (response && response.data) {
-          const updatedBudgets = response.data.budgets.map((budget) => {
-            const totalExpenses = budget.expenses.reduce(
-              (sum, expense) => sum + expense.amount,
-              0
-            );
-            const remainingAmount = budget.amount - totalExpenses;
-
-            return {
-              ...budget,
-              remainingAmount,
-            };
+        await axios
+          .post("/api/budget/create", {
+            user: Cookies.get("authUserId"),
+            category,
+            label,
+            amount,
+          })
+          .then((res) => {
+            toast.success("Budget added successfully")
+            setBudget((prevItems) => [
+              ...prevItems,
+              {
+                ...res.data.budget,
+                remainingAmount: amount,
+              },
+            ]);
+          })
+          .catch((err) => {
+            if (err.status === 409) {
+              toast.error("Budget already created");
+            }
+            console.log(err);
           });
-          setLoading(false);
-          setBudget(updatedBudgets);
-        }
       } catch (error) {
-        setLoading(false);
-        console.log("Error fetching data:", error);
+        toast.error(error);
       }
-    };
+      resetForm();
+    },
+  });
 
+  const { values, errors, touched, handleChange, handleSubmit } = formik;
+  const fetchBudget = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post("/api/budget/getall", {
+        id: Cookies.get("authUserId"),
+      });
+
+      if (response && response.data) {
+        const updatedBudgets = response.data.budgets.map((budget) => {
+          const totalExpenses = budget.expenses.reduce(
+            (sum, expense) => sum + expense.amount,
+            0
+          );
+          const remainingAmount = budget.amount - totalExpenses;
+
+          return {
+            ...budget,
+            remainingAmount,
+          };
+        });
+        setLoading(false);
+        setBudget(updatedBudgets);
+      }
+    } catch (error) {
+      setLoading(false);
+      console.log("Error fetching data:", error);
+    }
+  };
+  useEffect(() => {
     fetchBudget();
   }, []);
 
@@ -65,47 +116,43 @@ const Budget = () => {
     setTotalRemainingBudget(totalRemainingBudget);
   }, [budget]);
 
-  const handleSubmit = async () => {
-    try {
-      await axios
-        .post("/api/budget/create", {
-          user: Cookies.get("authUserId"),
-          category: newCategory,
-          label: newDesc,
-          amount: newAmount,
-        })
-        .then((res) => {
-          setBudget((prevItems) => [
-            ...prevItems,
-            {
-              ...res.data.budget,
-              remainingAmount: newAmount,
-            },
-          ]);
-          setNewAmount("");
-          setNewCategory("");
-          setNewDesc("");
-        })
-        .catch((err) => {
-          if (err.status === 409) {
-            toast.error("Budget already created");
-          }
-          console.log(err);
-        });
-    } catch (error) {
-      toast.error(error);
-    }
+  const deleteBudget = async () => {
+      try {
+        await axios
+          .post("/api/budget/delete", {
+            budgetId:deleteBudgetId,
+          })
+          .then((res) => {
+            fetchBudget()
+            console.log(res.data.remainingBudgets);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } catch (error) {
+        console.log(err);
+      }
+    toast.success("Budget deleted");
   };
 
   return (
     <>
-      <section className=" min-h-[88.9vh] dark:bg-gray-900 py-10 px-5 ">
+      <section
+        className={` dark:bg-gray-900 py-10 px-5 relative ${
+          showDelConfirmationPopUp
+            ? "h-[88.9vh] overflow-hidden"
+            : "min-h-[88.9vh]"
+        }`}
+      >
         <div className="pb-5">
           <h1 className="text-2xl font-bold pb-5  text-gray-800 dark:text-gray-100">
             Add Budget
           </h1>
 
-          <div className="md:px-5 pt-10 pb-7 grid grid-cols-2 gap-x-2 max-w-[600px] mx-auto">
+          <form
+            onSubmit={handleSubmit}
+            className="md:px-5 pb-7 grid grid-cols-2 gap-x-2 max-w-[600px] mx-auto"
+          >
             <div className="md:flex md:items-center mb-6 col-span-2 md:col-span-1">
               <div className="">
                 <label
@@ -120,10 +167,14 @@ const Budget = () => {
                   className="bg-gray-200 text-gray-800 font-bold appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-600"
                   id="inline-password"
                   type="text"
+                  name="amount"
                   placeholder="100"
-                  value={newAmount}
-                  onChange={(e) => setNewAmount(e.target.value)}
+                  value={values.amount}
+                  onChange={handleChange}
                 />
+                {errors.amount && touched.amount && (
+                  <span className="text-sm text-red-600">{errors.amount}</span>
+                )}
               </div>
             </div>
             <div className="md:flex md:items-center mb-6 col-span-2 md:col-span-1">
@@ -140,10 +191,16 @@ const Budget = () => {
                   className="bg-gray-200 text-gray-800 font-bold appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-600"
                   id="inline-password"
                   type="text"
+                  name="category"
                   placeholder="Grocery"
-                  value={newCategory}
-                  onChange={(e) => setNewCategory(e.target.value)}
+                  value={values.category}
+                  onChange={handleChange}
                 />
+                {errors.category && touched.category && (
+                  <span className="text-sm text-red-600">
+                    {errors.category}
+                  </span>
+                )}
               </div>
             </div>
             <div className="md:flex md:items-center mb-6 col-span-2">
@@ -160,12 +217,13 @@ const Budget = () => {
                   className="bg-gray-200 text-gray-800 font-bold appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-600"
                   id="inline-full-name"
                   placeholder="e.g. Healthy diet"
-                  value={newDesc}
-                  onChange={(e) => {
-                    setNewDesc(e.target.value);
-                    setRemainingBalance(e.target.value);
-                  }}
+                  name="label"
+                  value={values.label}
+                  onChange={handleChange}
                 ></textarea>
+                {errors.label && touched.label && (
+                  <span className="text-sm text-red-600">{errors.label}</span>
+                )}
               </div>
             </div>
             <div className="flex items-center justify-end col-span-2">
@@ -178,16 +236,38 @@ const Budget = () => {
                   Back
                 </button>
                 <button
-                  onClick={handleSubmit}
                   className="shadow bg-gray-600 hover:bg-gray-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-                  type="button"
+                  type="submit"
                 >
                   Add
                 </button>
               </div>
             </div>
-          </div>
+          </form>
         </div>
+        {showDelConfirmationPopUp && (
+          <div className="delete-confirmation-popup min-h-screen fixed top-0 left-0 w-full flex justify-center items-center ">
+            <div className="py-5 px-3 w-80 bg-white shadow-[0_0_12px_5px_rgba(0,0,0,0.1)] mx-auto rounded-md">
+              <div className="mb-3 text-center">
+                <p>Are You sure you want to delete the Budget?</p>
+              </div>
+              <div className="flex justify-between items-center">
+                <button
+                  onClick={() => setShowDelConfirmationPopUp(false)}
+                  className="shadow bg-gray-600 hover:bg-gray-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+                >
+                  Cancel
+                </button>
+                <button onClick={()=>{
+                  setShowDelConfirmationPopUp(false)
+                  deleteBudget()
+                }} className="shadow bg-gray-600 hover:bg-gray-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">
+                  Yes
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         <div className="pt-5">
           <div className="border-b border-gray-500 dark:border-gray-200 mb-5">
             <h3 className="text-xl font-bold pb-2">Budget List</h3>
@@ -225,18 +305,27 @@ const Budget = () => {
                                 : "text-green-400"
                             }  font-bold`}
                           >
-                            &#x20B9;{bud.remainingAmount ?? remainingBalance}
+                            &#x20B9;{bud.remainingAmount ?? bud.remainingAmount}
                           </td>
                           <td>
-                            <Link
-                              href={{
-                                pathname: "/budget/edit",
-                                query: { id: bud._id },
-                              }}
-                              state={bud}
-                            >
-                              <CiEdit className="text-3xl mx-auto" />
-                            </Link>
+                            <div className="flex gap-1 justify-center items-center">
+                              <Link
+                                href={{
+                                  pathname: "/budget/edit",
+                                  query: { id: bud._id },
+                                }}
+                                state={bud}
+                              >
+                                <AiTwotoneEdit className="text-2xl" />
+                              </Link>
+                              <MdDeleteOutline
+                                onClick={() => {
+                                  setdeleteBudgetId(bud._id)
+                                  setShowDelConfirmationPopUp(true);
+                                }}
+                                className="text-2xl"
+                              />
+                            </div>
                           </td>
                         </tr>
                       ))}
@@ -255,7 +344,7 @@ const Budget = () => {
           </div>
         </div>
       </section>
-      <ToastContainer />
+      <ToastContainer autoClose={30000} />
     </>
   );
 };

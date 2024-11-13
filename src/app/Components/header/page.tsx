@@ -45,7 +45,7 @@ const Header = () => {
   
 
   return (
-    <header className="fixed top-0 w-full p-5 dark:bg-gray-700 dark:text-white bg-white border-b text-gray-800">
+    <header className="fixed top-0 w-full p-5 dark:bg-gray-700 dark:text-white bg-white border-b text-gray-800 z-50">
       <div className="flex justify-between items-center">
         <div className="text-2xl [text-shadow:1px_1px_2px_#565656]">
           EXPENSO

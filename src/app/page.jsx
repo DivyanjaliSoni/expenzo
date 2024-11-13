@@ -159,7 +159,7 @@ export default function Home() {
           </div>
         )}
       </div>
-      <ToastContainer />
+      <ToastContainer autoClose={1500} />
     </section>
   );
 }
