@@ -245,22 +245,22 @@ const Budget = () => {
           </form>
         </div>
         {showDelConfirmationPopUp && (
-          <div className="delete-confirmation-popup min-h-screen fixed top-0 left-0 w-full flex justify-center items-center ">
-            <div className="py-5 px-3 w-80 bg-white shadow-[0_0_12px_5px_rgba(0,0,0,0.1)] mx-auto rounded-md">
-              <div className="mb-3 text-center">
+          <div className="delete-confirmation-popup min-h-screen fixed top-0 left-0 w-full flex justify-center items-center  ">
+            <div className="py-5 px-3 w-80 bg-white shadow-[0_0_12px_5px_rgba(0,0,0,0.1)] mx-auto rounded-md dark:bg-gray-600">
+              <div className="mb-3 text-center text-gray-600 dark:text-white">
                 <p>Are You sure you want to delete the Budget?</p>
               </div>
               <div className="flex justify-between items-center">
                 <button
                   onClick={() => setShowDelConfirmationPopUp(false)}
-                  className="shadow bg-gray-600 hover:bg-gray-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+                  className="shadow bg-gray-600 hover:bg-gray-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded dark:bg-gray-500"
                 >
                   Cancel
                 </button>
                 <button onClick={()=>{
                   setShowDelConfirmationPopUp(false)
                   deleteBudget()
-                }} className="shadow bg-gray-600 hover:bg-gray-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded">
+                }} className="shadow bg-gray-600 hover:bg-gray-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded dark:bg-gray-500">
                   Yes
                 </button>
               </div>
@@ -343,7 +343,7 @@ const Budget = () => {
           </div>
         </div>
       </section>
-      <ToastContainer autoClose={30000} />
+      <ToastContainer autoClose={1500} />
     </>
   );
 };

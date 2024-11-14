@@ -8,7 +8,7 @@ import Cookies from "js-cookie";
 ChartJS.register(ArcElement, Tooltip, Legend, Title);
 
 const PieChart = () => {
-  const [pieTitle, setPieTitle] = useState("Balance Amount");
+  const [pieTitle, setPieTitle] = useState("Balance Proportion");
   const [budgetCategory, setBudgetCategory] = useState([]);
   const [budgetCategoryTotalExpense, setBudgetCategoryTotalExpense] = useState([]);
 
